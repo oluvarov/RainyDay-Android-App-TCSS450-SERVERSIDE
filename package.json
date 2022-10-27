@@ -1,0 +1,22 @@
+{
+  "name": "rainyday",
+  "version": "1.0.0",
+  "description": "Serverside for weather chat android app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ondip/Team-1-TCSS450-SERVERSIDE.git"
+  },
+  "author": "ondip",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ondip/Team-1-TCSS450-SERVERSIDE/issues"
+  },
+  "homepage": "https://github.com/ondip/Team-1-TCSS450-SERVERSIDE#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
