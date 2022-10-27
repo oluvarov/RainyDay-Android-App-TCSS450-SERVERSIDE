@@ -4,7 +4,7 @@
   "description": "Serverside for weather chat android app",
   "main": "app.js",
   "scripts": {
-    "run": "node app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
