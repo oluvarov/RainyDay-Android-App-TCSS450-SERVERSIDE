@@ -48,7 +48,7 @@ const router = express.Router()
  * @apiError (400: Other Error) {String} detail Information about th error
  * 
  */ 
-router.post('/', (request, response, next) => {
+ router.post('/', (request, response, next) => {
 
     //Retrieve data from query params
     const first = request.body.first
@@ -56,6 +56,13 @@ router.post('/', (request, response, next) => {
     const username = isStringProvided(request.body.username) ?  request.body.username : request.body.email
     const email = request.body.email
     const password = request.body.password
+
+    function getRandomNumber(digit) {
+        return Math.random().toFixed(digit).split('.')[1];
+      }
+
+    const uniqueCode = getRandomNumber(8);
+    
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
     if(isStringProvided(first) 
@@ -66,12 +73,13 @@ router.post('/', (request, response, next) => {
         
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
         //If you want to read more: https://stackoverflow.com/a/8265319
-        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email) VALUES ($1, $2, $3, $4) RETURNING Email, MemberID"
-        let values = [first, last, username, email]
+        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Verification) VALUES ($1, $2, $3, $4, $5) RETURNING Email, MemberID"
+        let values = [first, last, username, email, uniqueCode]
         pool.query(theQuery, values)
             .then(result => {
                 //stash the memberid into the request object to be used in the next function
                 request.memberid = result.rows[0].memberid
+                request.uniqueCode = uniqueCode
                 next()
             })
             .catch((error) => {
@@ -115,7 +123,7 @@ router.post('/', (request, response, next) => {
                     success: true,
                     email: request.body.email
                 })
-                sendEmail("our.email@lab.com", request.body.email, "Welcome to our App!", "Please verify your Email account.")
+                sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verify/' + request.uniqueCode)
             })
             .catch((error) => {
                 //log the error for debugging
@@ -135,6 +143,7 @@ router.post('/', (request, response, next) => {
                 })
             })
 })
+
 
 router.get('/hash_demo', (request, response) => {
     let password = 'hello12345'
