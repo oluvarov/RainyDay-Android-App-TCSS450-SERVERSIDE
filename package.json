@@ -1,26 +1,29 @@
 {
-  "name": "rainyday",
+  "name": "450-lab",
   "version": "1.0.0",
-  "description": "Serverside for weather chat android app",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js"
-  },
+  "description": "TCSS 450 Lab for creating a webservice",
+  "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondip/Team-1-TCSS450-SERVERSIDE.git"
+    "url": "https://github.com/cfb3/tcss-450-web-service-starter"
   },
-  "author": "ondip",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ondip/Team-1-TCSS450-SERVERSIDE/issues"
+  "scripts": {
+    "test": "index.js"
   },
-  "homepage": "https://github.com/ondip/Team-1-TCSS450-SERVERSIDE#readme",
+  "keywords": [
+    "TCSS450",
+    "Mobile",
+    "Apps"
+  ],
+  "author": "TCSS 450",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "path": "^0.12.7"
-  },
-  "engines": {
-    "node": "18.6.0"
+    "express": "^4.17.1",
+    "form-data": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "npm": "^6.14.0",
+    "pg": "^8.0.2",
+    "pushy": "^2.0.8"
   }
 }
