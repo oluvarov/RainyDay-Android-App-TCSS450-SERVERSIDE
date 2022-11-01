@@ -123,7 +123,7 @@ const router = express.Router()
                     success: true,
                     email: request.body.email
                 })
-                sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verify/' + request.uniqueCode)
+                sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
             })
             .catch((error) => {
                 //log the error for debugging
