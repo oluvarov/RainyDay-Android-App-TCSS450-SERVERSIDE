@@ -1,19 +1,8 @@
 //express is the framework we're going to use to handle requests
 const { response } = require('express')
 const { request } = require('express')
-const express = require('express')
+const express = require('express') 
 const pool = require('../utilities').pool
-
-//Access the connection to Heroku Database
-//const pool = require('../utilities').pool
-
-//const validation = require('../utilities').validation
-//let isStringProvided = validation.isStringProvided
-
-//const generateHash = require('../utilities').generateHash
-//const generateSalt = require('../utilities').generateSalt
-
-//const sendEmail = require('../utilities').sendEmail
 
 const url = require('url');
 const querystring = require('querystring');
@@ -30,7 +19,7 @@ router.get('/', function(req, res, next){
     const values = [code]
 
     pool.query(theQuery, values)
-            .then(result => {
+            .then(result => { //TODO: error handling for sql .catch
 
                 if (result.rowCount == 0) {
                     res.status(404).send('<h3>🚫Verification code is invalid, or email was already verified.</h3>')
@@ -43,14 +32,39 @@ router.get('/', function(req, res, next){
                 
             })
   }, (req, res) => {
-    console.log(req.memberid)
-    console.log(req.code)
     const theQuery = 'UPDATE MEMBERS SET Verification = $2 WHERE MemberID = $1'
     const values = [req.memberid, 1]
-    pool.query(theQuery, values)
-    res.send('✅Your email was successfully verified!' + req.query.code);
+    pool.query(theQuery, values)  //TODO: SQL .cath error handling
+    res.status(200).send('✅Your email was successfully verified!'); //TODO: Wrap this responce into SQL .then
   });
 
+  router.get('/status', function(req, res){
+    const email = req.body.email;
+    
+    const theQuery = 'SELECT Email, Verification FROM MEMBERS WHERE email = $1'
+    const values = [email]
 
+    pool.query(theQuery, values)  //TODO: SQL .cath error handling
+            .then(result => {
 
-module.exports = router
+                if (result.rowCount == 0) {
+                    res.status(404).send({
+                        message: 'User not found' 
+                    })
+                    return
+                } else if (result.rows[0].verification == 1){
+                    res.status(200).send({
+                        message: 'Verified' 
+                    })
+                    return
+                } else if (result.rows[0].verification != 1){
+                    res.status(400).send({
+                        message: 'Email is not verified' 
+                    })
+                    return
+                }  
+                
+            })
+  });
+
+module.exports = router 

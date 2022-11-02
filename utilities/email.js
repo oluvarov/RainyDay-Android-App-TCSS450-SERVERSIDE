@@ -1,22 +1,15 @@
 const nodemailer = require('nodemailer')
-
+//TODO: Put email and s]password into environment variables
 const Transport = nodemailer.createTransport({
         service : "Gmail",
         auth: {
-            user: "tcss450chat@gmail.com",
-            pass: "mykrlmsszhvnvolt"
+            user: process.env.GMAIL_EMAIL,
+            pass: process.env.GMAIL_PASSWORD
         }
     });
 
 let sendEmail = (sender, receiver, theSubject, message) => {
-    //research nodemailer for sending email from node.
-    // https://nodemailer.com/about/
-    // https://www.w3schools.com/nodejs/nodejs_email.asp
-    //create a burner gmail account 
-    //make sure you add the password to the environmental variables
-    //similar to the DATABASE_URL and PHISH_DOT_NET_KEY (later section of the lab)
-
-    //fake sending an email for now. Post a message to logs. 
+   
 
     var mailOptions = {
         from: sender,
@@ -33,13 +26,7 @@ let sendEmail = (sender, receiver, theSubject, message) => {
         }
     });
 
-    // console.log("*********************************************************")
-    // console.log('To: ' + receiver)
-    // console.log('From: ' + sender)
-    // console.log('Subject: ' + subject)
-    // console.log("_________________________________________________________")
-    // console.log(message)
-    // console.log("*********************************************************")
+
 
 }
 
