@@ -19,7 +19,7 @@ router.get('/', function(req, res, next){
     const values = [code]
 
     pool.query(theQuery, values)
-            .then(result => { //TODO: error handling for sql .catch
+            .then(result => { 
 
                 if (result.rowCount == 0) {
                     res.status(404).send('<h3>🚫Verification code is invalid, or email was already verified.</h3>')
