@@ -31,12 +31,23 @@ router.get('/', function(req, res, next){
                 }   
                 
             })
+            .catch((error) => {
+                console.log("member verification")
+                console.log(error)
+
+            })
   }, (req, res) => {
     const theQuery = 'UPDATE MEMBERS SET Verification = $2 WHERE MemberID = $1'
     const values = [req.memberid, 1]
-    pool.query(theQuery, values)  //TODO: SQL .cath error handling
-    res.status(200).send('✅Your email was successfully verified!'); //TODO: Wrap this responce into SQL .then
-  });
+    pool.query(theQuery, values)
+    .then(result => {
+        res.status(200).send('✅Your email was successfully verified!') 
+    })
+    .catch((error) => {
+        console.log("Member update")
+        console.log(error)
+    })
+  })
 
   router.get('/status', function(req, res){
     const email = req.body.email;
@@ -44,7 +55,7 @@ router.get('/', function(req, res, next){
     const theQuery = 'SELECT Email, Verification FROM MEMBERS WHERE email = $1'
     const values = [email]
 
-    pool.query(theQuery, values)  //TODO: SQL .cath error handling
+    pool.query(theQuery, values)  
             .then(result => {
 
                 if (result.rowCount == 0) {
@@ -64,6 +75,15 @@ router.get('/', function(req, res, next){
                     return
                 }  
                 
+            })
+            .catch((error) => {
+                console.log("Error on SELECT")
+                console.log(error)
+                console.log("************************")
+                console.log(err.stack)
+                response.status(400).send({
+                message: error.detail
+            })
             })
   });
 
