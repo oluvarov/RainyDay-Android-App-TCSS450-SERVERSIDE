@@ -58,12 +58,7 @@ router.get('/', function(req, res, next){
     pool.query(theQuery, values)  
             .then(result => {
 
-                if (result.rowCount == 0) {
-                    res.status(404).send({
-                        message: 'User not found' 
-                    })
-                    return
-                } else if (result.rows[0].verification == 1){
+                if (result.rows[0].verification == 1){
                     res.status(200).send({
                         message: 'Verified' 
                     })
