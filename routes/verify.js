@@ -49,8 +49,8 @@ router.get('/', function(req, res, next){
     })
   })
 
-  router.get('/status', function(req, res){
-    const email = req.headers.email;
+  router.post('/status', function(req, res){
+    const email = req.body.email;
     
     const theQuery = 'SELECT Email, Verification FROM MEMBERS WHERE email = $1'
     const values = [email]
