@@ -11,7 +11,22 @@ const { nextTick } = require('process');
 const router = express.Router()
 
 
-
+/**
+ * @api {get} /verification Request to verify email
+ * @apiName getEmailVerification
+ * @apiGroup Verification
+ * @apiParam code
+ * 
+ * @apiSuccess {boolean} success true when the email is found and code matched.
+ * @apiSuccess {String} message "✅Your email was successfully verified!"
+ * 
+ *  * @apiSuccessExample {html} Success-Response:
+ *     HTTP/1.1 200 OK
+ *       <h3>✅Your email was successfully verified!</h3>
+ * 
+ * @apiError (404: User Not Found) {String} message "User not found"
+ * 
+ */ 
 router.get('/', function(req, res, next){
     const code = req.query.code;
     
@@ -48,6 +63,24 @@ router.get('/', function(req, res, next){
         console.log(error)
     })
   })
+
+/**
+ * @api {post} /verification/status Request to verify if email is confirmed
+ * @apiName getEmailVerificationStatus
+ * @apiGroup Verification
+ * @apiParam email
+ * 
+ * @apiSuccess {boolean} success true when the email is found and code matched.
+ * @apiSuccess {String} message "✅Your email was successfully verified!"
+ * 
+ *  * @apiSuccessExample {string} Success-Response:
+ *     HTTP/1.1 200 OK
+ *       'Verified'
+ * 
+ * @apiError (404: User Not Found) {String} message "User not found"
+ * @apiError (400: Email is not verified) {String} message "Email is not verified"
+ * 
+ */ 
 
   router.post('/status', function(req, res){
     const email = req.body.email;

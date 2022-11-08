@@ -86,8 +86,6 @@ router.get('/', (request, response, next) => {
                 return
             }
 
-            
-
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             

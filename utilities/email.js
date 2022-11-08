@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer')
-//TODO: Put email and s]password into environment variables
 const Transport = nodemailer.createTransport({
         service : "Gmail",
         auth: {

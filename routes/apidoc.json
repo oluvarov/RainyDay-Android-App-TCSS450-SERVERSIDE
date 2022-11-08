@@ -1,15 +1,7 @@
 {
-    "name": "TCSS 450 Lab Web Service",
+    "name": "RainyDay Chat App for TCSS450 Croup 1",
     "version": "0.1.0",
-    "description": "The TCSS 450 Lab Web Service API Documentation",
-    "title": "Lab API Doc",
-    "url" : "https://cfb3-lab4-backend-2020sp.herokuapp.com",
-    "order": [
-      "Hello",
-      "Params",
-      "Wait",
-      "DemoSql",
-      "Auth",
-      "Phish"
-    ]
+    "description": "Term project for TCSS450",
+    "title": "RainyDay Chat API Doc",
+    "url" : "https://tcss450-weather-chat.herokuapp.com/"
   }
