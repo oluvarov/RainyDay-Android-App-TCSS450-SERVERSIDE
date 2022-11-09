@@ -1,5 +1,6 @@
-#⛈️Rainyday Chat
-###TCSS 450 Team 1 SERVERSIDE for Weather Chatting App
+# ⛈️Rainyday Chat
 
-🔗 https://tcss450-weather-chat.herokuapp.com/
+### TCSS 450 Team 1 SERVERSIDE for Weather Chatting App
+
+### 🔗 https://tcss450-weather-chat.herokuapp.com/
 
