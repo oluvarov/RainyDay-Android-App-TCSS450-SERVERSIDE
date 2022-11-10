@@ -23,6 +23,8 @@ app.use('/auth', require('./routes/register.js'))
 app.use('/auth', require('./routes/signin.js')) 
 app.use('/verification', require('./routes/verify.js'))
 
+app.use('/user', middleware.checkToken, require('./routes/user.js'))
+
 
 /*
  * Return HTML for the / end point. 
