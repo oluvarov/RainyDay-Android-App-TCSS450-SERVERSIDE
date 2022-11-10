@@ -28,9 +28,8 @@ const router = express.Router()
  * 
  */ 
 router.get('/', function(req, res, next){
-    console.log(req.decoded);
 
-        res.status(200).send('Pong!') 
+        res.status(200).send('Pong!' + req.decoded) 
     
 })
 
