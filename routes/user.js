@@ -207,6 +207,7 @@ router.post('/update/name', function(req, res, next){
             // })
 
             if (storedSaltedHash === providedSaltedHash) {
+                res.status(200).send('pong')
                 next();
                 //res.status(200).send('pong')
             }
@@ -224,7 +225,7 @@ router.post('/update/name', function(req, res, next){
     pool.query(theQuery, values)
         .then(result => {
             //We successfully added the user!
-            response.status(201).send({
+            response.status(200).send({
                 success: true
             })
             //sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
