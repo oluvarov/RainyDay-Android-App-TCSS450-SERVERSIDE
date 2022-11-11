@@ -157,7 +157,7 @@ router.post('/update/name', function(req, res, next){
     if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
         res.status(400).send('bad request')
         return
-    } else if(req.headers.oldPassword == req.headers.newPassword){
+    } else if(req.headers.oldPassword === req.headers.newPassword){
         res.status(400).send('bad request: old password cannot be the same as new')
         return
     } else {
