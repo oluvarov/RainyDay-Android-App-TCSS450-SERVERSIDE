@@ -209,6 +209,7 @@ router.post('/update/name', function(req, res, next){
 
             if (storedSaltedHash === providedSaltedHash) {
                 res.status(200).send('pong')
+
                 next();
                 //res.status(200).send('pong')
             }
@@ -218,6 +219,8 @@ router.post('/update/name', function(req, res, next){
   }, (req,res,next) => {
     newPassword = req.newPassword;
     memberid = req.memberid;
+
+    res.status(200).send('pong' + newPassword + "  " + memberid)
 
     let salt = generateSalt(32)
     let salted_hash = generateHash(newPassword, salt)
