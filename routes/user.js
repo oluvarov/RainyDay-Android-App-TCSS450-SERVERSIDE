@@ -7,6 +7,7 @@ const pool = require('../utilities/exports').pool
 const url = require('url');
 const querystring = require('querystring');
 const { nextTick } = require('process');
+const e = require('express');
 
 const generateHash = require('../utilities').generateHash
 const generateSalt = require('../utilities').generateSalt
@@ -206,12 +207,10 @@ router.post('/update/password', (req, res, next) => {
             // })
 
             if (storedSaltedHash === providedSaltedHash) {
-                //res.status(200).send('pong')
                 next();
-                //res.status(200).send('pong')
+            } else {
+                res.status(400).send('Bad request')
             }
-
-            //res.status(200).send('pong2')
         })
   }, (req, res) => {
     newPassword = req.newPassword;
@@ -228,7 +227,7 @@ router.post('/update/password', (req, res, next) => {
     pool.query(theQuery, values)
         .then(result => {
             //We successfully added the user!
-            response.status(200).send({
+            res.status(200).send({
                 success: true
             })
         })
@@ -237,7 +236,7 @@ router.post('/update/password', (req, res, next) => {
              console.log("PWD insert on password change")
              console.log(error)
 
-            response.status(400).send({
+            res.status(400).send({
                 message: "error_03, see detail",
                 detail: error.detail
             })
