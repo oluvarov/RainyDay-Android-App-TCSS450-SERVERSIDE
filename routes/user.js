@@ -216,7 +216,7 @@ router.post('/update/name', function(req, res, next){
 
             //res.status(200).send('pong2')
         })
-  }, (req,res,next) => {
+  }, (req,res) => {
     newPassword = req.newPassword;
     memberid = req.memberid;
 
