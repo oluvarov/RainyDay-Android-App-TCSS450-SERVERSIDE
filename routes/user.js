@@ -241,26 +241,25 @@ router.post('/update/password', (req, res, next) => {
                 detail: error.detail
             })
         })
-
   })
 
 router.get('/', function(req, res){
 
     const memberid = req.decoded.memberid;
 
-
-    theQuery = 'SELECT MemberID, firstname, lastname FROM MEMBERS WHERE memberid = $1'
+    theQuery = 'SELECT memberid, firstname, lastname FROM MEMBERS WHERE memberid = $1'
     const values = [memberid]
 
     pool.query(theQuery, values)
             .then(result => { 
-
                 if (result.rowCount == 0) {
                     res.status(404).send('invalid input')
                     return
                 } else {
+                    const memid= result.rows[0].memberid;
                     res.json({
                         success: true,
+                        memberid: memid,
                         firstname: result.rows[0].firstname,
                         lastname: result.rows[0].lastname
                     })
