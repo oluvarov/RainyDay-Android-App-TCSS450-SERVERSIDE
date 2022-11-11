@@ -257,11 +257,14 @@ router.get('/', function(req, res){
                     return
                 } else {
                     const memid= result.rows[0].memberid;
+                    const firstname = result.rows[0].firstname;
+                    const lastname = result.rows[0].lastname;
+
                     res.json({
                         success: true,
                         memberid: memid,
-                        firstname: result.rows[0].firstname,
-                        lastname: result.rows[0].lastname
+                        firstname: firstname,
+                        lastname: lastname
                     })
                 }   
                 
