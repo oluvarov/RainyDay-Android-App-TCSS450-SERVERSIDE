@@ -169,7 +169,7 @@ router.post('/update/name', function(req, res, next){
     //     res.status(400).send('bad request: old password cannot be the same as new')
     //     return
     
-  }, (req,res,next) => {
+  }, (req, res, next) => {
     const memberid = req.memberid;
     const oldPassword = req.oldPassword;
     const newPassword = req.newPassword;
@@ -209,24 +209,23 @@ router.post('/update/name', function(req, res, next){
 
             if (storedSaltedHash === providedSaltedHash) {
                 res.status(200).send('pong')
-
                 next();
                 //res.status(200).send('pong')
             }
 
             //res.status(200).send('pong2')
         })
-  }, (req,res) => {
-    newPassword = req.newPassword;
-    memberid = req.memberid;
+  }, (req, res) => {
+    //newPassword = req.newPassword;
+    //memberid = req.memberid;
 
-    res.status(200).send('pong' + newPassword + "  " + memberid)
+    res.status(200).send('pong_last')
 
     let salt = generateSalt(32)
-    let salted_hash = generateHash(newPassword, salt)
+    //let salted_hash = generateHash(newPassword, salt)
 
     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
-    let values = [salted_hash, salt, memberid]
+    //let values = [salted_hash, salt, memberid]
 
     pool.query(theQuery, values)
         .then(result => {
