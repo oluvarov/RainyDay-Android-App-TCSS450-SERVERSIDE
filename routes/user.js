@@ -154,8 +154,11 @@ router.post('/update/name', function(req, res, next){
 
 router.post('/update/password', (req, res, next) => {
 
-    if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
+    if (isStringProvided(req.header("oldPassword")) || isStringProvided(req.header("newPassword"))) {
         res.status(400).send('bad request')
+        return
+    }  else if(req.header("oldPassword") === req.header("newPassword")){
+        res.status(400).send('bad request: old password cannot be the same as new')
         return
     } else {
         req.memberid = req.decoded.memberid;
@@ -164,9 +167,6 @@ router.post('/update/password', (req, res, next) => {
         next();
     }
 
-    // else if(req.headers.oldPassword === req.headers.newPassword){
-    //     res.status(400).send('bad request: old password cannot be the same as new')
-    //     return
     
   }, (req, res, next) => {
     const memberid = req.memberid;
@@ -186,7 +186,6 @@ router.post('/update/password', (req, res, next) => {
                 })
                 return
             }
-            //res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid + " " + req.oldPassword + " " + oldPassword)
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             
@@ -195,16 +194,6 @@ router.post('/update/password', (req, res, next) => {
 
             //Generate a hash based on the stored salt and the provided password
             let providedSaltedHash = generateHash(req.oldPassword, salt)
-
-            
-            // res.status(200).send({
-            //     oldPas: req.oldPassword,
-            //     oldpashe: req.headers.oldPassword,
-            //     memid: result.rows[0].memberid,
-            //     stsalthash: storedSaltedHash,
-            //     provsalthash: providedSaltedHash,
-            //     sal: salt
-            // })
 
             if (storedSaltedHash === providedSaltedHash) {
                 next();
