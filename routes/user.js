@@ -208,7 +208,7 @@ router.post('/update/name', function(req, res, next){
             // })
 
             if (storedSaltedHash === providedSaltedHash) {
-                res.status(200).send('pong')
+                //res.status(200).send('pong')
                 next();
                 //res.status(200).send('pong')
             }
