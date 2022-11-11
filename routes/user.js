@@ -159,9 +159,9 @@ router.post('/update/name', function(req, res, next){
         return
     } else {
         req.memberid = req.decoded.memberid;
-        //req.oldPassword = req.headers.oldPassword;
-       // req.newPassword = req.headers.newPassword;
-        res.status(400).send(req.header("oldPassword") + "  " + req)
+        req.oldPassword = req.header("oldPassword")
+        req.newPassword = req.header("newPassword")
+        //res.status(400).send(req.header("oldPassword") + "  " + req)
         next();
     }
 
@@ -187,7 +187,7 @@ router.post('/update/name', function(req, res, next){
                 })
                 return
             }
-            //res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid)
+            res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid + " " + req.oldPassword + " " + oldPassword)
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             
