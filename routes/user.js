@@ -161,6 +161,7 @@ router.post('/update/name', function(req, res, next){
         req.memberid = req.decoded.memberid;
         req.oldPassword = req.headers.oldPassword;
         req.newPassword = req.headers.newPassword;
+        res.status(400).send(req.newPassword + "  " + req.headers.oldPassword)
         next();
     }
 
