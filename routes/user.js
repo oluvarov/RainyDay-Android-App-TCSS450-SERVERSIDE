@@ -198,6 +198,7 @@ router.post('/update/name', function(req, res, next){
 
             res.status(200).send({
                 oldPas: req.oldPassword,
+                oldpashe: req.headers.oldPassword,
                 memid: result.rows[0].memberid,
                 stsalthash: storedSaltedHash,
                 provsalthash: providedSaltedHash,
