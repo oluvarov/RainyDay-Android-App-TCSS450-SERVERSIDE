@@ -194,9 +194,10 @@ router.post('/update/name', function(req, res, next){
             let storedSaltedHash = result.rows[0].saltedhash 
 
             //Generate a hash based on the stored salt and the provided password
-            let providedSaltedHash = generateHash(oldPassword, salt)
+            let providedSaltedHash = generateHash(req.oldPassword, salt)
 
             res.status(200).send({
+                oldPas: req.oldPassword,
                 memid: result.rows[0].memberid,
                 stsalthash: storedSaltedHash,
                 provsalthash: providedSaltedHash,
