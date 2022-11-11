@@ -157,11 +157,14 @@ router.post('/update/name', function(req, res, next){
     if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
         res.status(400).send('bad request')
         return
+    } else if(req.headers.oldPassword == req.headers.newPassword){
+        res.status(400).send('bad request: old password cannot be the same as new')
+        return
     } else {
         req.memberid = req.decoded.memberid;
         req.oldPassword = req.headers.oldPassword;
         req.newPassword = req.headers.newPassword;
-        res.status(200).send('pong')
+        next();
     }
 
   }, (req,res,next) => {
@@ -193,7 +196,8 @@ router.post('/update/name', function(req, res, next){
             let providedSaltedHash = generateHash(oldPassword, salt)
 
             if (storedSaltedHash === providedSaltedHash) {
-                next();
+                //next();
+                res.status(200).send('pong')
             }
         })
   }, (req,res,next) => {
