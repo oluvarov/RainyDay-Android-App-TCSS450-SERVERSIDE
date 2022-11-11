@@ -211,6 +211,8 @@ router.post('/update/name', function(req, res, next){
                 next();
                 //res.status(200).send('pong')
             }
+
+            res.status(200).send('pong2')
         })
   }, (req,res,next) => {
     newPassword = req.newPassword;
