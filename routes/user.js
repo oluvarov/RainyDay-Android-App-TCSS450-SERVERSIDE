@@ -186,7 +186,7 @@ router.post('/update/name', function(req, res, next){
                 })
                 return
             }
-            res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid)
+            //res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid)
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             
@@ -195,6 +195,13 @@ router.post('/update/name', function(req, res, next){
 
             //Generate a hash based on the stored salt and the provided password
             let providedSaltedHash = generateHash(oldPassword, salt)
+
+            res.status(200).send({
+                memid: result.rows[0].memberid,
+                stsalthash: storedSaltedHash,
+                provsalthash: providedSaltedHash,
+                sal: salt
+            })
 
             if (storedSaltedHash === providedSaltedHash) {
                 //next();
