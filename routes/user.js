@@ -76,7 +76,7 @@ router.post('/update/name', function(req, res, next){
     const values = [req.firstname,req.lastname,req.memberid]
     pool.query(theQuery, values)
     .then(result => {
-        res.status(200).send('✅') 
+        res.status(200).send('✅')
     })
     .catch((error) => {
         console.log("Member update")
@@ -151,8 +151,7 @@ router.post('/update/name', function(req, res, next){
 //   })
 
 
-  router.post('/update/password', (req, res, next) => {
-
+router.post('/update/password', (req, res, next) => {
 
     if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
         res.status(400).send('bad request')
@@ -161,7 +160,6 @@ router.post('/update/name', function(req, res, next){
         req.memberid = req.decoded.memberid;
         req.oldPassword = req.header("oldPassword")
         req.newPassword = req.header("newPassword")
-        //res.status(400).send(req.header("oldPassword") + "  " + req)
         next();
     }
 
@@ -171,8 +169,8 @@ router.post('/update/name', function(req, res, next){
     
   }, (req, res, next) => {
     const memberid = req.memberid;
-    const oldPassword = req.oldPassword;
-    const newPassword = req.newPassword;
+    //const oldPassword = req.oldPassword;
+    //const newPassword = req.newPassword;
 
     const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                       INNER JOIN Members ON
@@ -219,13 +217,13 @@ router.post('/update/name', function(req, res, next){
     newPassword = req.newPassword;
     memberid = req.memberid;
 
-    res.status(200).send('pong_last' + newPassword + " mem: " + memberid)
+    //res.status(200).send('pong_last' + newPassword + " mem: " + memberid)
 
     let salt = generateSalt(32)
-    //let salted_hash = generateHash(newPassword, salt)
+    let salted_hash = generateHash(newPassword, salt)
 
-    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
-    //let values = [salted_hash, salt, memberid]
+    const theQuery = "UPDATE CREDENTIALS SET saltedhash = '$1', salt = '$2' WHERE MemberID = '$3'"
+    const values = [salted_hash, salt, memberid]
 
     pool.query(theQuery, values)
         .then(result => {
@@ -234,6 +232,16 @@ router.post('/update/name', function(req, res, next){
                 success: true
             })
             //sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
+        })
+        .catch((error) => {
+            //log the error for debugging
+             console.log("PWD insert on password change")
+             console.log(error)
+
+            response.status(400).send({
+                message: "error_03, see detail",
+                detail: error.detail
+            })
         })
 
   })
