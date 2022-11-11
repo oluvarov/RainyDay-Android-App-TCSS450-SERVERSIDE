@@ -186,7 +186,7 @@ router.post('/update/name', function(req, res, next){
                 })
                 return
             }
-
+            res.status(200).send('pong' + result.rows[0].salt +"   " + result.rows[0].memberid)
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             
