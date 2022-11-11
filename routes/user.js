@@ -262,9 +262,9 @@ router.get('/', function(req, res){
 
                     res.json({
                         success: true,
-                        memberid: memid,
-                        firstname: firstname,
-                        lastname: lastname
+                        "memberid": memid,
+                        "firstname": result.rows[0],
+                        "lastname": lastname
                     })
                 }   
                 
