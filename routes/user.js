@@ -222,7 +222,7 @@ router.post('/update/password', (req, res, next) => {
     let salt = generateSalt(32)
     let salted_hash = generateHash(newPassword, salt)
 
-    const theQuery = "UPDATE CREDENTIALS SET saltedhash = '$1', salt = '$2' WHERE MemberID = '$3'"
+    const theQuery = "UPDATE CREDENTIALS SET saltedhash = '$1', salt = '$2' WHERE MemberID = '$3';"
     const values = [salted_hash, salt, memberid]
 
     pool.query(theQuery, values)
@@ -231,7 +231,6 @@ router.post('/update/password', (req, res, next) => {
             response.status(200).send({
                 success: true
             })
-            //sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
         })
         .catch((error) => {
             //log the error for debugging
