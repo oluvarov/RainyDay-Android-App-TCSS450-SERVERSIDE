@@ -216,10 +216,10 @@ router.post('/update/name', function(req, res, next){
             //res.status(200).send('pong2')
         })
   }, (req, res) => {
-    //newPassword = req.newPassword;
-    //memberid = req.memberid;
+    newPassword = req.newPassword;
+    memberid = req.memberid;
 
-    res.status(200).send('pong_last')
+    res.status(200).send('pong_last' + newPassword + " mem: " + memberid)
 
     let salt = generateSalt(32)
     //let salted_hash = generateHash(newPassword, salt)
