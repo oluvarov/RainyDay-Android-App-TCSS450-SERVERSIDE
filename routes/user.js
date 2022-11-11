@@ -84,7 +84,74 @@ router.post('/update/name', function(req, res, next){
     })
   })
 
-router.post('/update/password', (req, res, next) => {
+// router.post('/update/password', (req, res, next) => {
+
+
+//     if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
+//         res.status(400).send('bad request')
+//         return
+//     } else {
+//         req.memberid = req.decoded.memberid;
+//         req.oldPassword = req.headers.oldPassword;
+//         req.newPassword = req.headers.newPassword;
+//         next();
+//     }
+
+//   }, (req,res,next) => {
+//     const memberid = req.memberid;
+//     const oldPassword = req.oldPassword;
+//     const newPassword = req.newPassword;
+
+//     const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
+//                       INNER JOIN Members ON
+//                       Credentials.memberid=Members.memberid 
+//                       WHERE Members.memberid=$1`
+//     const values = [memberid]
+//     pool.query(theQuery, values)
+//         .then(result => {
+//             if (result.rowCount == 0) {
+//                 response.status(404).send({
+//                     message: 'User not found' 
+//                 })
+//                 return
+//             }
+
+//             //Retrieve the salt used to create the salted-hash provided from the DB
+//             let salt = result.rows[0].salt
+            
+//             //Retrieve the salted-hash password provided from the DB
+//             let storedSaltedHash = result.rows[0].saltedhash 
+
+//             //Generate a hash based on the stored salt and the provided password
+//             let providedSaltedHash = generateHash(oldPassword, salt)
+
+//             if (storedSaltedHash === providedSaltedHash) {
+//                 next();
+//             }
+//         })
+//   }, (req,res,next) => {
+//     newPassword = req.newPassword;
+//     memberid = req.memberid;
+
+//     let salt = generateSalt(32)
+//     let salted_hash = generateHash(newPassword, salt)
+
+//     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
+//     let values = [salted_hash, salt, memberid]
+
+//     pool.query(theQuery, values)
+//         .then(result => {
+//             //We successfully added the user!
+//             response.status(201).send({
+//                 success: true
+//             })
+//             //sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
+//         })
+
+//   })
+
+
+  router.post('/update/password', (req, res, next) => {
 
 
     if (isStringProvided(req.headers.oldPassword) || isStringProvided(req.headers.newPassword)) {
@@ -94,7 +161,7 @@ router.post('/update/password', (req, res, next) => {
         req.memberid = req.decoded.memberid;
         req.oldPassword = req.headers.oldPassword;
         req.newPassword = req.headers.newPassword;
-        next();
+        res.status(200).send('pong')
     }
 
   }, (req,res,next) => {
