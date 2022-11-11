@@ -256,15 +256,11 @@ router.get('/', function(req, res){
                     res.status(404).send('invalid input')
                     return
                 } else {
-                    const memid= result.rows[0].memberid;
-                    const firstname = result.rows[0].firstname;
-                    const lastname = result.rows[0].lastname;
-
                     res.json({
                         success: true,
-                        "memberid": memid,
-                        "firstname": result.rows[0],
-                        "lastname": lastname
+                        memberid: result.rows[0].memberid,
+                        firstname: result.rows[0].firstname,
+                        lastname: result.rows[0].lastname
                     })
                 }   
                 
