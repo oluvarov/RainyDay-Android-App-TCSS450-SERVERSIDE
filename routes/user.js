@@ -30,13 +30,16 @@ const router = express.Router()
 router.post('/update/name', function(req, res, next){
 
     const memberid = req.decoded.memberid;
-   // const email = req.decoded.email;
     const firstname = req.headers.firstname;
     const lastname = req.headers.lastname;
 
+    if (firstname.length == 0 || lastname.length == 0) {
+        res.status(400).send('bad request')
+        return
+    }
+
     theQuery = 'SELECT MemberID, firstname, lastname FROM MEMBERS WHERE memberid = $1'
     const values = [memberid]
-   // res.status(200).send('Pong!' + req.decoded.memberid) 
 
     pool.query(theQuery, values)
             .then(result => { 
@@ -72,7 +75,37 @@ router.post('/update/name', function(req, res, next){
         console.log(error)
     })
   })
-    
+
+
+
+router.get('/', function(req, res){
+
+    const memberid = req.decoded.memberid;
+
+
+    theQuery = 'SELECT MemberID, firstname, lastname FROM MEMBERS WHERE memberid = $1'
+    const values = [memberid]
+
+    pool.query(theQuery, values)
+            .then(result => { 
+
+                if (result.rowCount == 0) {
+                    res.status(404).send('invalid input')
+                    return
+                } else {
+                    res.json({
+                        success: true,
+                        firstname: result.rows[0].firstname,
+                        lastname: result.rows[0].lastname
+                    })
+                }   
+                
+            })
+            .catch((error) => {
+                console.log("member lookup")
+                console.log(error)
+            })
+  })    
 
 
 module.exports = router 
