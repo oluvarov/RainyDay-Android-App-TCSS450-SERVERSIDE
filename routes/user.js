@@ -247,7 +247,7 @@ router.get('/', function(req, res){
 
     const memberid = req.decoded.memberid;
 
-    theQuery = 'SELECT memberid, firstname, lastname FROM MEMBERS WHERE memberid = $1'
+    theQuery = 'SELECT memberid, username, firstname, lastname FROM MEMBERS WHERE memberid = $1'
     const values = [memberid]
 
     pool.query(theQuery, values)
@@ -259,6 +259,7 @@ router.get('/', function(req, res){
                     res.json({
                         success: true,
                         memberid: result.rows[0].memberid,
+                        username: result.rows[0].username,
                         firstname: result.rows[0].firstname,
                         lastname: result.rows[0].lastname
                     })
