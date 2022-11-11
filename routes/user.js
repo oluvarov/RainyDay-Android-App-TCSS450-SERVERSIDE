@@ -27,10 +27,52 @@ const router = express.Router()
  * @apiError (404: User Not Found) {String} message "User not found"
  * 
  */ 
-router.get('/', function(req, res, next){
+router.post('/update/name', function(req, res, next){
 
-        res.status(200).send('Pong!' + req.decoded.memberid) 
+    const memberid = req.decoded.memberid;
+   // const email = req.decoded.email;
+    const firstname = req.headers.firstname;
+    const lastname = req.headers.lastname;
+
+    theQuery = 'SELECT MemberID, firstname, lastname FROM MEMBERS WHERE memberid = $1'
+    const values = [memberid]
+   // res.status(200).send('Pong!' + req.decoded.memberid) 
+
+    pool.query(theQuery, values)
+            .then(result => { 
+
+                if (result.rowCount == 0) {
+                    res.status(404).send('invalid input')
+                    return
+                } else {
+                    if (result.rows[0].firstname == firstname && result.rows[0].lastname == lastname) {
+                        res.status(400).send('bad request')
+                        return
+                    }
+                    req.memberid = result.rows[0].memberid
+                    req.firstname = firstname;
+                    req.lastname = lastname;
+                    next()
+                }   
+                
+            })
+            .catch((error) => {
+                console.log("member lookup")
+                console.log(error)
+            })
+  }, (req, res) => {
+    const theQuery = 'UPDATE MEMBERS SET firstname = $1, lastname = $2 WHERE MemberID = $3'
+    const values = [req.firstname,req.lastname,req.memberid]
+    pool.query(theQuery, values)
+    .then(result => {
+        res.status(200).send('✅') 
+    })
+    .catch((error) => {
+        console.log("Member update")
+        console.log(error)
+    })
+  })
     
-})
+
 
 module.exports = router 
