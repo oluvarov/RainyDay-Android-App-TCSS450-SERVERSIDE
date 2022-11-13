@@ -35,8 +35,7 @@ router.get("/", (req, res) => {
                 if (result.rowCount == 0) {
                     res.status(404).send({
                         message: "User Information not found",
-                        address: email,
-                        memberid: memberid
+                        address: email
                     })
                 }else{
                     req.memberid = result.rows[0].memberid
@@ -54,7 +53,7 @@ router.get("/", (req, res) => {
     let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
 
     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
-    const values = [salted_hash, salt, memberid]
+    const values = [newSaltedHash, salt, memberid]
 
     pool.query(theQuery, values)
     .then(result => {
