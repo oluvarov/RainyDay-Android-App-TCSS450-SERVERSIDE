@@ -31,23 +31,14 @@ router.get("/", (req, res) => {
                 if (result.rowCount == 0) {
                     res.status(404).send({
                         message: "User Information not found",
-                        address: address,
+                        address: email,
                         theQuery: theQuery
                     })
-                }  else {
-                    let salt = generateSalt(32)
-                    let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
-                    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE email = $3'
-                    const values = [newSaltedHash, salt, email]
-                    pool.query(theQuery, values)
-                            .then(result => {
-                                res.status(201).send( {
-                                    success: true,
-                                    message: "Temporary password created"
-                                })
-                                sendEmail("tcss450chat@gmail.com", request.body.email, "New Temporary Password", 'Your new password: ' + newPassword)
+                }else{
+                    res.status(201).send({
+                        message: true,
+                        theQuery: theQuery
                     })
-                    
                 }
             })
             return 
@@ -56,3 +47,20 @@ router.get("/", (req, res) => {
 
 module.exports = router
 
+
+
+// }  else {
+//     let salt = generateSalt(32)
+//     let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
+//     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE email = $3'
+//     const values = [newSaltedHash, salt, email]
+//     pool.query(theQuery, values)
+//             .then(result => {
+//                 res.status(201).send( {
+//                     success: true,
+//                     message: "Temporary password created"
+//                 })
+//                 sendEmail("tcss450chat@gmail.com", request.body.email, "New Temporary Password", 'Your new password: ' + newPassword)
+//     })
+    
+// }
