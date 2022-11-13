@@ -18,7 +18,7 @@ const router = express.Router()
 
 router.get("/", (req, res) => {
         const email = req.body.email
-        req.memberid = result.rows[0].memberid
+        req.memberid = req.rows[0].memberid
         const memberid = req.memberid
 
         if(isStringProvided(email)) {
