@@ -18,10 +18,14 @@ const router = express.Router()
 
 router.get("/", (req, res) => {
         const email = req.body.email
+        req.memberid = result.rows[0].memberid
+        const memberid = req.memberid
+
         if(isStringProvided(email)) {
             res.status(201).send( {
                 success: true,
-                message: email
+                message: email,
+                memberid: memberid
         })
     }
 })
