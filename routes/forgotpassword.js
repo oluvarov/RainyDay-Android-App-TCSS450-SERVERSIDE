@@ -22,7 +22,7 @@ const router = express.Router()
 
 router.get("/", (req, res) => {
 
-    const memberid = req.decoded.memberid;
+    //const memberid = req.decoded.memberid;
     const email = req.body.email
 
 
