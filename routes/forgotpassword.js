@@ -63,6 +63,7 @@ router.get("/", (req, res, next) => {
             success: true,
             message: "Temporary password created"
         })
+        sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newSaltedHash)
     })
     .catch((error) => {
         console.log("Member update")
