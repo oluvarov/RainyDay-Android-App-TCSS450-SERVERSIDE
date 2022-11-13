@@ -52,19 +52,20 @@ router.get("/", (req, res, next) => {
 }, (req, res) => {
 
     let salt = generateSalt(32)
-    let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
+    let randomPassword = (Math.random() + 1).toString(36).substring(7)
+    let newPassword = generateHash(randomPassword, salt) //hash for new password
 
-    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
-    const values = [newSaltedHash, salt, req.memberid]
+    const theQuery = 'UPDATE CREDENTIALS SET  password = $1, salt = $2 WHERE MemberID = $3'
+    const values = [newPassword, salt, req.memberid]
 
     pool.query(theQuery, values)
     .then(result => {
         res.status(201).send({
             success: true,
             message: "Temporary password created",
-            newpassword: newSaltedHash
+            newpassword: newPassword
         })
-        sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newSaltedHash)
+        sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newPassword)
     })
     .catch((error) => {
         console.log("Member update")
@@ -74,6 +75,7 @@ router.get("/", (req, res, next) => {
 
 
 module.exports = router
+
 
 
 
