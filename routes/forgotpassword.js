@@ -22,7 +22,7 @@ const router = express.Router()
 
 router.get("/", (req, res) => {
 
-    //const memberid = req.decoded.memberid;
+    const memberid = req.decoded.memberid;
     const email = req.body.email
 
 
@@ -41,11 +41,11 @@ router.get("/", (req, res) => {
                         address: email
                     })
                 }else{
-                    //req.memberid = result.rows[0].memberid
+                    req.memberid = result.rows[0].memberid
                     res.status(200).send({
                         message: "User Found",
                         address: email,
-                        
+                        member: memberid   
                     })
                 }
             })
