@@ -35,7 +35,7 @@ router.get("/", (req, res) => {
                     })
                 }  else {
                     let salt = generateSalt(32)
-                    let newSaltedHash = getHash("randomPassword", salt) //hash for new password
+                    let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
                     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
                     const values = [newSaltedHash, salt, memberid]
                     pool.query(theQuery, values)
