@@ -20,7 +20,7 @@ let isStringProvided = validation.isStringProvided
 const router = express.Router()
 
 
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
 
     const email = req.body.email
 
