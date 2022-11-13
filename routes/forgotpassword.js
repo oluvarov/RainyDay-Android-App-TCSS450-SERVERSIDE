@@ -52,8 +52,7 @@ router.get("/", (req, res, next) => {
 }, (req, res) => {
 
     let salt = generateSalt(32)
-    let randomPassword = (Math.random() + 1).toString(36).substring(7)
-    let newPassword = generateHash(randomPassword, salt) //hash for new password
+    let newPassword = generateHash("random", salt) //hash for new password
 
     const theQuery = 'UPDATE CREDENTIALS SET  password = $1, salt = $2 WHERE MemberID = $3'
     const values = [newPassword, salt, req.memberid]
