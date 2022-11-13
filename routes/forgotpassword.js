@@ -31,8 +31,8 @@ router.get("/", (req, res) => {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                           INNER JOIN Members ON
                           Credentials.memberid=Members.memberid 
-                          WHERE Members.memberid=$1`
-        const values = [memberid]
+                          WHERE Members.email=$1`
+        const values = [email]
         pool.query(theQuery, values)
             .then(result => {
                 if (result.rowCount == 0) {
