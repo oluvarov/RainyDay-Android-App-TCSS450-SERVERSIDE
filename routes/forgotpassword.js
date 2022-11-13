@@ -20,6 +20,13 @@ let isStringProvided = validation.isStringProvided
 const router = express.Router()
 
 
+router.get("/", (req, res) => {
+
+    const memberid = req.decoded.memberid;
+    const email = req.body.email
+
+
+
     if(isStringProvided(email)) {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                           INNER JOIN Members ON
@@ -38,7 +45,7 @@ const router = express.Router()
                     res.status(200).send({
                         message: "User Found",
                         address: email,
-                        memberid: memberid
+                        
                     })
                 }
             })
