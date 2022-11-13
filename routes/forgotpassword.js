@@ -1,27 +1,23 @@
 //express is the framework we're going to use to handle requests
 const { response } = require('express')
 const { request } = require('express')
-const express = require('express')
+const express = require('express') 
+const pool = require('../utilities/exports').pool
 
-//Access the connection to Heroku Database
-const pool = require('../utilities').pool
-
-const validation = require('../utilities').validation
-let isStringProvided = validation.isStringProvided
+const url = require('url');
+const querystring = require('querystring');
+const { nextTick } = require('process');
+const e = require('express');
 
 const generateHash = require('../utilities').generateHash
 const generateSalt = require('../utilities').generateSalt
 
 const sendEmail = require('../utilities').sendEmail
 
+const validation = require('../utilities').validation
+let isStringProvided = validation.isStringProvided
+
 const router = express.Router()
-
-
-router.get("/", (req, res) => {
-
-    const memberid = req.decoded.memberid;
-    const email = req.body.email
-
 
 
     if(isStringProvided(email)) {
