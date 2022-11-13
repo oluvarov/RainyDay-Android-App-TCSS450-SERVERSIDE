@@ -20,8 +20,7 @@ const router = express.Router()
 router.get("/", (req, res) => {
     const email = req.body.email
     if(isStringProvided(email)) {
-        req.memberid = req.decoded.memberid;
-        const memberid = req.memberid;
+        const memberid = req.decoded.memberid;
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                           INNER JOIN Members ON
                           Credentials.memberid=Members.memberid 
