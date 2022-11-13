@@ -16,12 +16,15 @@ const sendEmail = require('../utilities').sendEmail
 
 const router = express.Router()
 
-router.get("/", (request, res) => {
-    // created group email for mailing purposes. mail sent from there
-    var address = request.query.email
-    if(request.query.email) {
-        let theQuery = 'SELECT Password, Salt FROM Members WHERE Email=' + address
-        let values = []
+router.get("/", (req, res) => {
+    const email = req.body.email
+    if(isStringProvided(email)) {
+        const memberid = req.memberid;
+        const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
+                          INNER JOIN Members ON
+                          Credentials.memberid=Members.memberid 
+                          WHERE Members.memberid=$1`
+        const values = [memberid]
         pool.query(theQuery, values)
             .then(result => {
                 if (result.rowCount == 0) {
@@ -31,34 +34,17 @@ router.get("/", (request, res) => {
                         theQuery: theQuery
                     })
                 }  else {
-
-                    //Retrieve the salt used to create the salted-hash provided from the DB
-                    let salt = result.rows[0].salt
-                    
-                    //Retrieve the salted-hash password provided from the DB
-                    let storedSaltedHash = result.rows[0].saltedhash
-        
-                    //Generate a hash based on the stored salt and the provided password
-                    let providedSaltedHash = generateHash(req.oldPassword, salt)
-        
-                    if (storedSaltedHash === providedSaltedHash) {
-                        next();
-                    } else {
-                        res.status(400).send('Bad request: Error 05')
-                    }
-                    
-                    let update =`UPDATE Members 
-                                SET Password=$1, Salt=$2 WHERE email=$3`
-                    let vals = [mySaltNewPass, newSalt, address]
-                    pool.query(update, vals)
+                    let salt = generateSalt(32)
+                    let newSaltedHash = getHash("randomPassword", salt) //hash for new password
+                    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
+                    const values = [newSaltedHash, salt, memberid]
+                    pool.query(theQuery, values)
                             .then(result => {
-                                let message1 = "Your password with Group 1's app has been changed." +
-                                " Your new password is:\n" + mySaltNewPass
                                 res.status(201).send( {
                                     success: true,
                                     message: "Temporary password created"
                                 })
-                        sendEmail(sourceEmail, email, "changed", message1)
+                                sendEmail("tcss450chat@gmail.com", request.body.email, "New Temporary Password", 'Your new password: ' + newPassword)
                     })
                     
                 }
@@ -68,5 +54,4 @@ router.get("/", (request, res) => {
 })
 
 module.exports = router
-
 
