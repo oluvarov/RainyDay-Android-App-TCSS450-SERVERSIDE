@@ -39,7 +39,11 @@ router.get("/", (req, res) => {
                     })
                 }else{
                     req.memberid = result.rows[0].memberid
-                    next()
+                    res.status(200).send({
+                        message: "User Found",
+                        address: email,
+                        memberid: memberid
+                    })
                 }
             })
             .catch((error) => {
@@ -47,25 +51,25 @@ router.get("/", (req, res) => {
                 console.log(error)
             })
     }
-}, (req, res) => {
+// }, (req, res) => {
 
-    let salt = generateSalt(32)
-    let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
+//     let salt = generateSalt(32)
+//     let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
 
-    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
-    const values = [newSaltedHash, salt, memberid]
+//     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
+//     const values = [newSaltedHash, salt, memberid]
 
-    pool.query(theQuery, values)
-    .then(result => {
-        res.status(201).send({
-            success: true,
-            message: "Temporary password created"
-        })
-    })
-    .catch((error) => {
-        console.log("Member update")
-        console.log(error)
-    })
+//     pool.query(theQuery, values)
+//     .then(result => {
+//         res.status(201).send({
+//             success: true,
+//             message: "Temporary password created"
+//         })
+//     })
+//     .catch((error) => {
+//         console.log("Member update")
+//         console.log(error)
+//     })
 })
 
 
