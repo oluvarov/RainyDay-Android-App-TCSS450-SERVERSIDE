@@ -61,7 +61,8 @@ router.get("/", (req, res, next) => {
     .then(result => {
         res.status(201).send({
             success: true,
-            message: "Temporary password created"
+            message: "Temporary password created",
+            newpassword: newSaltedHash
         })
         sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newSaltedHash)
     })
