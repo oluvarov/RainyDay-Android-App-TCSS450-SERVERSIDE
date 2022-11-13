@@ -18,6 +18,7 @@ const router = express.Router()
 
 router.get("/", (req, res) => {
         const email = req.body.email
+        req.memberid = req.decoded.memberid;
         const memberid = req.memberid;
         if(isStringProvided(email)) {
             res.status(201).send( {
