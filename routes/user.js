@@ -94,7 +94,7 @@ router.post('/update/password', (req, res, next) => {
     //     return
     // } else 
      if(req.header("oldPassword") === req.header("newPassword")){
-        res.status(400).send('bad request: old password cannot be the same as new')
+        res.status(400).send('bad request: old password cannot be the same as new!')
         return
     } else {
         req.memberid = req.decoded.memberid;
