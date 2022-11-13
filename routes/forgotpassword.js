@@ -41,7 +41,7 @@ router.get("/", (req, res) => {
                         address: email
                     })
                 }else{
-                    req.memberid = result.rows[0].memberid
+                    //req.memberid = result.rows[0].memberid
                     res.status(200).send({
                         message: "User Found",
                         address: email,
