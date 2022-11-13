@@ -18,14 +18,18 @@ const router = express.Router()
 
 
 router.get("/", (req, res) => {
+
+    const memberid = req.decoded.memberid;
     const email = req.body.email
+
+
+
     if(isStringProvided(email)) {
-        const memberid = req.decoded.memberid;
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                           INNER JOIN Members ON
                           Credentials.memberid=Members.memberid 
-                          WHERE Members.email=$1`
-        const values = [email]
+                          WHERE Members.memberid=$1`
+        const values = [memberid]
         pool.query(theQuery, values)
             .then(result => {
                 if (result.rowCount == 0) {
@@ -35,15 +39,36 @@ router.get("/", (req, res) => {
                         memberid: memberid
                     })
                 }else{
-                    res.status(201).send({
-                        message: true,
-                        memberid: memberid
-                    })
+                    request.memberid = result.rows[0].memberid
+                    next()
                 }
             })
-            return 
+            .catch((error) => {
+                console.log("member lookup")
+                console.log(error)
+            })
     }
+}, (req, res) => {
+
+    let salt = generateSalt(32)
+    let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
+
+    const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE MemberID = $3'
+    const values = [salted_hash, salt, memberid]
+
+    pool.query(theQuery, values)
+    .then(result => {
+        res.status(201).send({
+            success: true,
+            message: "Temporary password created"
+        })
+    })
+    .catch((error) => {
+        console.log("Member update")
+        console.log(error)
+    })
 })
+
 
 module.exports = router
 
