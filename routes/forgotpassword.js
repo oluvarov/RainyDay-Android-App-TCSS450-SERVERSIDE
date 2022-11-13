@@ -39,7 +39,7 @@ router.get("/", (req, res) => {
                         memberid: memberid
                     })
                 }else{
-                    request.memberid = result.rows[0].memberid
+                    req.memberid = result.rows[0].memberid
                     next()
                 }
             })
