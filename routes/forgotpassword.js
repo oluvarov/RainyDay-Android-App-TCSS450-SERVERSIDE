@@ -41,7 +41,6 @@ router.get("/", (req, res, next) => {
                     })
                 }else{
                     req.memberid = result.rows[0].memberid
-                    let salt = generateSalt(32)
                     let newPassword = (+new Date * Math.random()).toString(36).substring(0,6) 
                     res.status(201).send({
                         success: true,
