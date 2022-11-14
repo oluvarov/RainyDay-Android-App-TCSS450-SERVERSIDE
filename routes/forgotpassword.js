@@ -54,13 +54,15 @@ router.get("/", (req, res, next) => {
     let salt = generateSalt(32)
     let newPassword = (+new Date * Math.random()).toString(36).substring(0,6)  //New password
 
-    const theQuery = 'UPDATE CREDENTIALS SET  temporarypassword = $1, salt = $2 WHERE MemberID = $3'
-    const values = [newPassword, salt, req.memberid]
     res.status(201).send({
         success: true,
         member: req.memberid,
         newpassword: newPassword
     })
+
+    // const theQuery = 'UPDATE CREDENTIALS SET  temporarypassword = $1, salt = $2 WHERE MemberID = $3'
+    // const values = [newPassword, salt, req.memberid]
+  
     // pool.query(theQuery, values)
     // .then(result => {
     //     res.status(201).send({
