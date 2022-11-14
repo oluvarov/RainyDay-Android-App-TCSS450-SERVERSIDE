@@ -90,7 +90,11 @@ router.post('/update/name', function(req, res, next){
 router.post('/update/password', (req, res, next) => {
 
     if (!isStringProvided(req.header("oldPassword")) || !isStringProvided(req.header("newPassword"))) {
+<<<<<<< HEAD
         res.status(400).send('Missing Information')
+=======
+        res.status(400).send('Missing information')
+>>>>>>> 15452b406d80a1386f455777597c6fab2d34351e
         return
     } else 
      if(req.header("oldPassword") === req.header("newPassword")){
