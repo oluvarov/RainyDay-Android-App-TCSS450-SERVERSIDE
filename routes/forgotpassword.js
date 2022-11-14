@@ -52,24 +52,28 @@ router.get("/", (req, res, next) => {
 }, (req, res) => {
 
     let salt = generateSalt(32)
-    let newPassword = generateHash("random", salt) //hash for new password
+    let newPassword = (+new Date * Math.random()).toString(36).substring(0,6)  //New password
 
-    const theQuery = 'UPDATE CREDENTIALS SET  password = $1, salt = $2 WHERE MemberID = $3'
+    const theQuery = 'UPDATE CREDENTIALS SET  temporarypassword = $1, salt = $2 WHERE MemberID = $3'
     const values = [newPassword, salt, req.memberid]
-
-    pool.query(theQuery, values)
-    .then(result => {
-        res.status(201).send({
-            success: true,
-            message: "Temporary password created",
-            newpassword: newPassword
-        })
-        sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newPassword)
+    res.status(201).send({
+        success: true,
+        member: req.memberid,
+        newpassword: newPassword
     })
-    .catch((error) => {
-        console.log("Member update")
-        console.log(error)
-    })
+    // pool.query(theQuery, values)
+    // .then(result => {
+    //     res.status(201).send({
+    //         success: true,
+    //         message: "Temporary password created",
+    //         newpassword: newPassword
+    //     })
+    //     sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newPassword)
+    // })
+    // .catch((error) => {
+    //     console.log("Member update")
+    //     console.log(error)
+    // })
 })
 
 
@@ -78,18 +82,3 @@ module.exports = router
 
 
 
-// }  else {
-//     let salt = generateSalt(32)
-//     let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
-//     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE email = $3'
-//     const values = [newSaltedHash, salt, email]
-//     pool.query(theQuery, values)
-//             .then(result => {
-//                 res.status(201).send( {
-//                     success: true,
-//                     message: "Temporary password created"
-//                 })
-//                 sendEmail("tcss450chat@gmail.com", request.body.email, "New Temporary Password", 'Your new password: ' + newPassword)
-//     })
-    
-// }
