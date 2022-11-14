@@ -41,7 +41,14 @@ router.get("/", (req, res, next) => {
                     })
                 }else{
                     req.memberid = result.rows[0].memberid
-                    next()
+                    let salt = generateSalt(32)
+                    let newPassword = (+new Date * Math.random()).toString(36).substring(0,6) 
+                    res.status(201).send({
+                        success: true,
+                        member: req.memberid,
+                        newpassword: newPassword
+                    })
+                    
                 }
             })
             .catch((error) => {
@@ -49,16 +56,16 @@ router.get("/", (req, res, next) => {
                 console.log(error)
             })
     }
-}, (req, res) => {
+// }, (req, res) => {
 
-    let salt = generateSalt(32)
-    let newPassword = (+new Date * Math.random()).toString(36).substring(0,6)  //New password
+//     let salt = generateSalt(32)
+//     let newPassword = (+new Date * Math.random()).toString(36).substring(0,6)  //New password
 
-    res.status(201).send({
-        success: true,
-        member: req.memberid,
-        newpassword: newPassword
-    })
+//     res.status(201).send({
+//         success: true,
+//         member: req.memberid,
+//         newpassword: newPassword
+//     })
 
     // const theQuery = 'UPDATE CREDENTIALS SET  temporarypassword = $1, salt = $2 WHERE MemberID = $3'
     // const values = [newPassword, salt, req.memberid]
