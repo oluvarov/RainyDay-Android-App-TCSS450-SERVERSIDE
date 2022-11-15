@@ -52,19 +52,22 @@ router.get("/", (req, res, next) => {
 }, (req, res) => {
 
     let salt = generateSalt(32)
-    let newPassword = Math.random().toString(20).substring(7, 18)
+    let newPassword = Math.random().toString(20).substring(7, 15)
+    let saltedhash = generateHash(newPassword,salt);
 
-    const theQuery = 'UPDATE credentials join members SET temporarypassword = $1, salt = $2 WHERE MemberID = $3'
-    const values = [newPassword, salt, req.memberid]
+    const theQuery = 'UPDATE Credentials SET saltedhash= $1, salt= $2 WHERE MemberID = $3'
+    const values = [saltedhash, salt, req.memberid]
+
 
     pool.query(theQuery, values)
     .then(result => {
+        const email = req.body.email
         res.status(201).send({
             success: true,
-            message: "Temporary password created",
-            newpassword: newPassword
+            message: "New password created",
+            newpass: newPassword
         })
-        sendEmail("tcss450chat@gmail.com", email, "New Temporary Password", 'Your new password: ' + newPassword)
+        sendEmail("tcss450chat@gmail.com", email, "Password Reset", 'You have recently requested to reset your password.Your new password is: ' + newPassword)
     })
     .catch((error) => {
         console.log("Member update")
@@ -74,22 +77,3 @@ router.get("/", (req, res, next) => {
 
 
 module.exports = router
-
-
-
-
-// }  else {
-//     let salt = generateSalt(32)
-//     let newSaltedHash = generateHash("randomPassword", salt) //hash for new password
-//     const theQuery = 'UPDATE CREDENTIALS SET saltedhash = $1, salt = $2 WHERE email = $3'
-//     const values = [newSaltedHash, salt, email]
-//     pool.query(theQuery, values)
-//             .then(result => {
-//                 res.status(201).send( {
-//                     success: true,
-//                     message: "Temporary password created"
-//                 })
-//                 sendEmail("tcss450chat@gmail.com", request.body.email, "New Temporary Password", 'Your new password: ' + newPassword)
-//     })
-    
-// }
