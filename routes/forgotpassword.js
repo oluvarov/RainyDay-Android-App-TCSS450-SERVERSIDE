@@ -64,6 +64,7 @@ router.post("/", (req, res, next) => {
             message: "New password created",
             newpass: newPassword
         })
+        sendEmail("tcss450chat@gmail.com", email, "Forgot Password", "You have recently requested to reset your password.Your new password is: " + newPassword)
     })
     .catch((error) => {
         //credentials dod not match
