@@ -19,12 +19,9 @@ let isStringProvided = validation.isStringProvided
 
 const router = express.Router()
 
-
 router.get("/", (req, res, next) => {
 
     const email = req.body.email
-
-
 
     if(isStringProvided(email)) {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
@@ -62,16 +59,17 @@ router.get("/", (req, res, next) => {
     pool.query(theQuery, values)
     .then(result => {
         const email = req.body.email
-        res.status(201).send({
+        res.json({
             success: true,
             message: "New password created",
             newpass: newPassword
         })
-        sendEmail("tcss450chat@gmail.com", email, "Password Reset", 'You have recently requested to reset your password.Your new password is: ' + newPassword)
     })
     .catch((error) => {
-        console.log("Member update")
-        console.log(error)
+        //credentials dod not match
+        res.status(400).send({
+            message: 'Failed' 
+        })
     })
 })
 
