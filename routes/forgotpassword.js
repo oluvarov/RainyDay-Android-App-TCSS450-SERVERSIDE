@@ -19,7 +19,7 @@ let isStringProvided = validation.isStringProvided
 
 const router = express.Router()
 
-router.get("/", (req, res, next) => {
+router.post("/", (req, res, next) => {
 
     const email = req.body.email
 
@@ -59,7 +59,7 @@ router.get("/", (req, res, next) => {
     pool.query(theQuery, values)
     .then(result => {
         const email = req.body.email
-        res.json({
+        res.status(201).send({
             success: true,
             message: "New password created",
             newpass: newPassword
