@@ -25,6 +25,8 @@ app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
 app.use('/verification', require('./routes/verify.js'))
 app.use('/forgotpassword', require('./routes/forgotpassword.js'))
 app.use('/user', middleware.checkToken, require('./routes/user.js'))
+app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
+app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
 
 
 /*
