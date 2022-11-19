@@ -51,7 +51,7 @@ router.get('/current', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + req.zip + '&appid=4087482a4cfc4a57ffbdd797365dd918&units=metric'
+    let url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&units=metric'
 
     http.get(url, response => {
         let rawData = ''
@@ -93,7 +93,7 @@ router.get('/forecast', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=4087482a4cfc4a57ffbdd797365dd918&cnt=5'
+    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=5'
 
     http.get(url, response => {
         let rawData = ''
@@ -137,7 +137,7 @@ router.get('/today', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'http://pro.openweathermap.org/data/2.5/hourly?zip=' + req.zip + '&appid=4087482a4cfc4a57ffbdd797365dd918&cnt=24'
+    let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?zip='+ req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24'
 
     http.get(url, response => {
         let rawData = ''
