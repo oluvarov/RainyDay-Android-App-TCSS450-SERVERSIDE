@@ -16,7 +16,7 @@ router.get('/list', function(req, res, next){
         res.status(400).send('🚫Bad request!') 
     }
     
-    const theQuery = 'SELECT memberid,username FROM contacts INNER JOIN Members ON contacts.memberid_b = members.memberid WHERE memberid_a=$1'
+    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_b = members.memberid WHERE memberid_a=$1'
     const values = [memberid_a]
 
     pool.query(theQuery, values)
