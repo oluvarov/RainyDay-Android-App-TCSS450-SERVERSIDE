@@ -114,4 +114,48 @@ router.get('/forecast', function(req, res, next){
 
 
 
+router.get('/today', function(req, res, next){
+    const ip = req.headers.ip;
+    if (ip.length == 0) {
+        res.status(400).send('🚫Bad request!') 
+    }
+
+    let url = 'http://ip-api.com/json/'
+
+    http.get(url + ip, response => { //collecting response
+        let rawData = ''
+        response.on('data', chunk => {
+            rawData += chunk
+        })
+    
+        response.on('end', () => {
+            const parsedData = JSON.parse(rawData)
+            req.zip = parsedData.zip;
+            next()
+        })
+    })
+    
+  }, (req, res, next) => {
+
+    let url = 'http://pro.openweathermap.org/data/2.5/hourly?zip=' + req.zip + '&appid=4087482a4cfc4a57ffbdd797365dd918&cnt=24'
+
+    http.get(url, response => {
+        let rawData = ''
+        response.on('data', chunk => {
+            rawData += chunk
+        })
+    
+        response.on('end', () => {
+            const parsedData = JSON.parse(rawData);
+            req.weather = parsedData
+            next()
+        })
+
+    })
+  }, (req,res) => {
+    res.status(200).send(req.weather)
+  })
+
+
+
 module.exports = router 
