@@ -4,6 +4,7 @@ const { request } = require('express')
 const express = require('express') 
 const pool = require('../utilities').pool
 const http = require('http')
+const https = require('https')
 
 const url = require('url');
 const querystring = require('querystring');
@@ -131,6 +132,7 @@ router.get('/today', function(req, res, next){
         response.on('end', () => {
             const parsedData = JSON.parse(rawData)
             req.zip = parsedData.zip;
+            console.log("got ip")
             next()
         })
     })
@@ -139,20 +141,23 @@ router.get('/today', function(req, res, next){
 
     let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?zip='+ req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24'
 
-    http.get(url, response => {
+    https.get(url, response => {
         let rawData = ''
         response.on('data', chunk => {
             rawData += chunk
+            console.log("chunk")
         })
     
         response.on('end', () => {
             const parsedData = JSON.parse(rawData);
             req.weather = parsedData
+            console.log("savedparsed data")
             next()
         })
 
     })
   }, (req,res) => {
+    console.log("sending response")
     res.status(200).send(req.weather)
   })
 
