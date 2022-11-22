@@ -14,19 +14,16 @@ const router = express.Router()
 
 
 /**
- * @api {get} /verification Request to verify email
- * @apiName getEmailVerification
- * @apiGroup Verification
- * @apiParam code
+ * @api {get} /current
+ * @apiName getCurrentWeather
+ * @apiGroup Weather
+ * @apiParam ip
  * 
- * @apiSuccess {boolean} success true when the email is found and code matched.
- * @apiSuccess {String} message "✅Your email was successfully verified!"
  * 
- *  * @apiSuccessExample {html} Success-Response:
- *     HTTP/1.1 200 OK
- *       <h3>✅Your email was successfully verified!</h3>
+ * @apiSuccess {json} success when weather received from externalapi
  * 
- * @apiError (404: User Not Found) {String} message "User not found"
+ * 
+ * @apiError (404: bad request) {String} bad request
  * 
  */ 
 router.get('/current', function(req, res, next){
@@ -71,6 +68,18 @@ router.get('/current', function(req, res, next){
     res.status(200).send(req.weather)
   })
 
+  /**
+ * @api {get} /forecast
+ * @apiName getForecast
+ * @apiGroup Weather
+ * @apiParam ip
+ * 
+ * @apiSuccess {json} success when weather received from externalapi
+ * 
+ * 
+ * @apiError (404: bad request) {String} bad request
+ * 
+ */ 
 router.get('/forecast', function(req, res, next){
     const ip = req.headers.ip;
     if (ip.length == 0) {
@@ -113,7 +122,18 @@ router.get('/forecast', function(req, res, next){
     res.status(200).send(req.weather)
   })
 
-
+/**
+ * @api {get} /today
+ * @apiName getTodaysWeather
+ * @apiGroup Weather
+ * @apiParam ip
+ * 
+ * @apiSuccess {json} success when weather received from externalapi
+ * 
+ * 
+ * @apiError (404: bad request) {String} bad request
+ * 
+ */ 
 
 router.get('/today', function(req, res, next){
     const ip = req.headers.ip;

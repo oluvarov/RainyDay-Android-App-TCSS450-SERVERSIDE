@@ -19,6 +19,25 @@ let isStringProvided = validation.isStringProvided
 
 const router = express.Router()
 
+/**
+ * @api {post} / Request to generate password
+ * @apiName postPassword
+ * @apiGroup forgotpassword
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {Number} email of user
+ * 
+ * @apiSuccess (200: Success) {JSON} sends email
+ * 
+ * @apiError (400: Bad Request) {String} message "🚫Bad request!"
+ * 
+ * @apiError (404: Missing Parameters) {String} message "email not found"
+ * 
+ * @apiError (400: SQL Error) {String} forgot password error
+ * 
+ * @apiUse JSONError
+ */ 
+
 router.post("/", (req, res, next) => {
 
     const email = req.body.email

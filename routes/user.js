@@ -87,6 +87,22 @@ router.post('/update/name', function(req, res, next){
     })
   })
 
+/**
+ * @api {get} /user/update/password request to update password
+ * @apiName updatePassword
+ * @apiGroup user
+ * @apiParam oldPassword, newPassword
+ * 
+ * @apiSuccess {boolean} success true when the password updated
+ * @apiSuccess {json} message {success: true}
+ * 
+ *  * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *       {success: true}
+ * 
+ * @apiError (404: User Not Found) {String} message "User not found"
+ * 
+ */ 
 router.post('/update/password', (req, res, next) => {
 
     if (!isStringProvided(req.header("oldPassword")) || !isStringProvided(req.header("newPassword"))) {
@@ -168,6 +184,22 @@ router.post('/update/password', (req, res, next) => {
         })
   })
 
+/**
+ * @api {get} / request to get user information
+ * @apiName getUser
+ * @apiGroup user
+ * @apiParam memberid
+ * 
+ * @apiSuccess {boolean} success true when user exists, token provided.
+ * @apiSuccess {json} message {success: true}
+ * 
+ *  * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *       {success: true}
+ * 
+ * @apiError (404: User Not Found) {String} message "User not found"
+ * 
+ */ 
 router.get('/', function(req, res){
 
     const memberid = req.decoded.memberid;

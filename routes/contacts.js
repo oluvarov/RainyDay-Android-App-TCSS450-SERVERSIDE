@@ -12,7 +12,7 @@ const router = express.Router()
 
 
 /**
- * @api {get} /list Request to add a chat
+ * @api {get} /list Request to list contacts
  * @apiName getList
  * @apiGroup Contacts
  * 
