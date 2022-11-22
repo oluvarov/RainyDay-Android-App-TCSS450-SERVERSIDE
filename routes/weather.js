@@ -94,7 +94,7 @@ router.get('/forecast', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=5'
+    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=5&units=metric'
 
     http.get(url, response => {
         let rawData = ''
@@ -139,7 +139,7 @@ router.get('/today', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?zip='+ req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24'
+    let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?zip='+ req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24&units=metric'
 
     https.get(url, response => {
         let rawData = ''
