@@ -94,7 +94,7 @@ router.get('/forecast', function(req, res, next){
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=5&units=metric'
+    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=40&units=metric'
 
     http.get(url, response => {
         let rawData = ''
