@@ -197,5 +197,35 @@ router.get('/', function(req, res){
             })
   })    
 
+router.get('/list/chat', function(req, res, next){
+    const memberid = req.headers.memberid;
+    if (memberid.length < 1) {
+        res.status(400).send('🚫Bad request!') 
+    }
+    
+    const theQuery = 'SELECT chatid FROM chatmembers WHERE memberid=$1'
+    const values = [memberid]
+
+    pool.query(theQuery, values)
+            .then(result => { 
+
+                if (result.rowCount == 0) {
+                    res.status(404).send('Chats not found')
+                    return
+                } else {
+                    req.chat_id = result.rows
+                    next()
+                }   
+            })
+            .catch((error) => {
+                console.log("chatlist geting error")
+                console.log(error)
+
+            })
+  }, (req, res) => {
+    res.send(req.chat_id)
+  })
+
+
 
 module.exports = router 
