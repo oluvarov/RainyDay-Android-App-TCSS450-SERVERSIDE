@@ -10,6 +10,25 @@ const { nextTick } = require('process');
 
 const router = express.Router()
 
+
+/**
+ * @api {get} /list Request to add a chat
+ * @apiName getList
+ * @apiGroup Contacts
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {Number} memberid_a memberid of user
+ * 
+ * @apiSuccess (200: Success) {JSON} contacts json array
+ * 
+ * @apiError (400: Bad Request) {String} message "🚫Bad request!"
+ * 
+ * @apiError (404: Missing Parameters) {String} message "Contacts not found"
+ * 
+ * @apiError (400: SQL Error) {String} message contacts getting error
+ * 
+ * @apiUse JSONError
+ */ 
 router.get('/list', function(req, res, next){
     const memberid_a = req.headers.memberid_a;
     if (memberid_a.length < 1) {
