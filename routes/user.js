@@ -213,7 +213,8 @@ router.get('/list/chat', function(req, res, next){
                     res.status(404).send('Chats not found')
                     return
                 } else {
-                    req.chat_id = result.rows
+                    const chat_id = JSON.stringify(Object.assign({}, result.rows))
+                    req.chat_id = chat_id
                     next()
                 }   
             })
