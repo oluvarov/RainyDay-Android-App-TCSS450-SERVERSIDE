@@ -45,7 +45,8 @@ router.get('/list', function(req, res, next){
                     res.status(404).send('Contacts not found')
                     return
                 } else {
-                    req.contacts = result.rows
+                    const contacts = JSON.stringify(Object.assign({}, result.rows))
+                    req.contacts = contacts
                     next()
                 }   
             })
