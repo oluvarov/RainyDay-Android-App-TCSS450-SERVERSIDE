@@ -18,7 +18,9 @@ const router = express.Router()
  * @apiName getCurrentWeather
  * @apiGroup Weather
  * @apiParam ip
- * 
+ * @apiParam zip
+ * @apiParam lat
+ * @apiParam lon
  * 
  * @apiSuccess {json} success when weather received from externalapi
  * 
@@ -89,7 +91,9 @@ router.get('/current', function(req, res, next){
  * @apiName getForecast
  * @apiGroup Weather
  * @apiParam ip
- * 
+ * @apiParam zip
+ * @apiParam lat
+ * @apiParam lon
  * @apiSuccess {json} success when weather received from externalapi
  * 
  * 
@@ -158,6 +162,9 @@ router.get('/forecast', function(req, res, next){
  * @apiName getTodaysWeather
  * @apiGroup Weather
  * @apiParam ip
+ * @apiParam zip
+ * @apiParam lat
+ * @apiParam lon
  * 
  * @apiSuccess {json} success when weather received from externalapi
  * 
