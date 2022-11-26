@@ -27,12 +27,9 @@ const router = express.Router()
  * 
  */ 
 router.get('/current', function(req, res, next){
-    const ip = req.headers.ip;
-    if (ip.length == 0) {
-        res.status(400).send('🚫Bad request!') 
-    }
-
-    let url = 'http://ip-api.com/json/'
+    if (req.headers.ip) {
+        const ip = req.headers.ip;
+        let url = 'http://ip-api.com/json/'
 
     http.get(url + ip, response => { //collecting response
         let rawData = ''
@@ -46,10 +43,29 @@ router.get('/current', function(req, res, next){
             next()
         })
     })
+    } else if (req.headers.lat && req.headers.lon){
+        req.lat = req.headers.lat
+        req.lon = req.headers.lon
+        next()
+    } else if (req.headers.zip) {
+        req.zip = req.headers.zip
+        next()
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
+    
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&units=metric'
+    if (req.zip) {
+        var querry = "zip=" + req.zip
+    } else if (req.lat && req.lon) {
+        querry = "lat=" + req.lat + "&lon=" + req.lon
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
+
+    let url = 'http://api.openweathermap.org/data/2.5/weather?' + querry + '&appid=' + process.env.WEATHER_API_KEY + '&units=metric'
 
     http.get(url, response => {
         let rawData = ''
@@ -81,12 +97,9 @@ router.get('/current', function(req, res, next){
  * 
  */ 
 router.get('/forecast', function(req, res, next){
-    const ip = req.headers.ip;
-    if (ip.length == 0) {
-        res.status(400).send('🚫Bad request!') 
-    }
-
-    let url = 'http://ip-api.com/json/'
+    if (req.headers.ip) {
+        const ip = req.headers.ip;
+        let url = 'http://ip-api.com/json/'
 
     http.get(url + ip, response => { //collecting response
         let rawData = ''
@@ -100,10 +113,28 @@ router.get('/forecast', function(req, res, next){
             next()
         })
     })
+    } else if (req.headers.lat && req.headers.lon){
+        req.lat = req.headers.lat
+        req.lon = req.headers.lon
+        next()
+    } else if (req.headers.zip) {
+        req.zip = req.headers.zip
+        next()
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
     
   }, (req, res, next) => {
 
-    let url = 'http://api.openweathermap.org/data/2.5/forecast?zip=' + req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=40&units=metric'
+    if (req.zip) {
+        var querry = "zip=" + req.zip
+    } else if (req.lat && req.lon) {
+        querry = "lat=" + req.lat + "&lon=" + req.lon
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
+
+    let url = 'http://api.openweathermap.org/data/2.5/forecast?' + querry + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=40&units=metric'
 
     http.get(url, response => {
         let rawData = ''
@@ -136,12 +167,9 @@ router.get('/forecast', function(req, res, next){
  */ 
 
 router.get('/today', function(req, res, next){
-    const ip = req.headers.ip;
-    if (ip.length == 0) {
-        res.status(400).send('🚫Bad request!') 
-    }
-
-    let url = 'http://ip-api.com/json/'
+    if (req.headers.ip) {
+        const ip = req.headers.ip;
+        let url = 'http://ip-api.com/json/'
 
     http.get(url + ip, response => { //collecting response
         let rawData = ''
@@ -152,14 +180,31 @@ router.get('/today', function(req, res, next){
         response.on('end', () => {
             const parsedData = JSON.parse(rawData)
             req.zip = parsedData.zip;
-            console.log("got ip")
             next()
         })
     })
+    } else if (req.headers.lat && req.headers.lon){
+        req.lat = req.headers.lat
+        req.lon = req.headers.lon
+        next()
+    } else if (req.headers.zip) {
+        req.zip = req.headers.zip
+        next()
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
     
   }, (req, res, next) => {
 
-    let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?zip='+ req.zip + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24&units=metric'
+    if (req.zip) {
+        var querry = "zip=" + req.zip
+    } else if (req.lat && req.lon) {
+        querry = "lat=" + req.lat + "&lon=" + req.lon
+    } else {
+        res.status(400).send('🚫Bad request!') 
+    }
+
+    let url = 'https://pro.openweathermap.org/data/2.5/forecast/hourly?'+ querry + '&appid=' + process.env.WEATHER_API_KEY + '&cnt=24&units=metric'
 
     https.get(url, response => {
         let rawData = ''
