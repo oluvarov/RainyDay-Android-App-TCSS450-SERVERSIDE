@@ -45,10 +45,10 @@ router.post("/", (request, response, next) => {
     }
 }, (request, response) => {
 
-    let insert = `INSERT INTO Chats(Name)
-                  VALUES ($1)
+    let insert = `INSERT INTO Chats(Name, creatorID)
+                  VALUES ($1, $2)
                   RETURNING ChatId`
-    let values = [request.body.name]
+    let values = [request.body.name, request.decoded.memberid]
     pool.query(insert, values)
         .then(result => {
             response.send({
@@ -87,7 +87,7 @@ router.post("/", (request, response, next) => {
  * 
  * @apiUse JSONError
  */ 
-router.put("/:chatId/", (request, response, next) => {
+router.put("/:chatId/:memberid", (request, response, next) => {
     //validate on empty parameters
     if (!request.params.chatId) {
         response.status(400).send({
@@ -98,6 +98,8 @@ router.put("/:chatId/", (request, response, next) => {
             message: "Malformed parameter. chatId must be a number"
         })
     } else {
+        request.creatorID = request.decoded.memberid
+        console.log(request.creatorID)
         next()
     }
 }, (request, response, next) => {
@@ -112,11 +114,17 @@ router.put("/:chatId/", (request, response, next) => {
                     message: "Chat ID not found"
                 })
             } else {
+                if (result.rows[0].creatorID !== request.creatorID) {
+                    response.status(400).send({
+                        message: "This user is not the creator"
+                    })
+                    return
+                }
                 next()
             }
         }).catch(error => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 1",
                 error: error
             })
         })
@@ -124,7 +132,7 @@ router.put("/:chatId/", (request, response, next) => {
 }, (request, response, next) => {
     //validate email exists 
     let query = 'SELECT * FROM Members WHERE MemberId=$1'
-    let values = [request.decoded.memberid]
+    let values = [request.params.memberid]
 
 console.log(request.decoded)
 
@@ -140,14 +148,14 @@ console.log(request.decoded)
             }
         }).catch(error => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 2",
                 error: error
             })
         })
 }, (request, response, next) => {
         //validate email does not already exist in the chat
         let query = 'SELECT * FROM ChatMembers WHERE ChatId=$1 AND MemberId=$2'
-        let values = [request.params.chatId, request.decoded.memberid]
+        let values = [request.params.chatId, request.params.memberid]
     
         pool.query(query, values)
             .then(result => {
@@ -160,7 +168,7 @@ console.log(request.decoded)
                 }
             }).catch(error => {
                 response.status(400).send({
-                    message: "SQL Error",
+                    message: "SQL Error 3",
                     error: error
                 })
             })
@@ -170,7 +178,7 @@ console.log(request.decoded)
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
                   VALUES ($1, $2)
                   RETURNING *`
-    let values = [request.params.chatId, request.decoded.memberid]
+    let values = [request.params.chatId, request.params.memberid]
     pool.query(insert, values)
         .then(result => {
             response.send({
@@ -178,7 +186,7 @@ console.log(request.decoded)
             })
         }).catch(err => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 4",
                 error: err
             })
         })

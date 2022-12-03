@@ -27,9 +27,6 @@ app.use('/forgotpassword', require('./routes/forgotpassword.js'))
 app.use('/user', middleware.checkToken, require('./routes/user.js'))
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
-app.use('/weather', require('./routes/weather.js'))
-app.use('/contact', middleware.checkToken, require('./routes/contacts.js'))
-
 
 /*
  * Return HTML for the / end point. 
