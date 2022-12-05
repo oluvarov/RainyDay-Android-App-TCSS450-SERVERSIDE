@@ -114,7 +114,8 @@ router.put("/:chatId/:memberid", (request, response, next) => {
                     message: "Chat ID not found"
                 })
             } else {
-                if (result.rows[0].creatorID !== request.creatorID) {
+                if (result.rows[0].creatorid !== request.creatorID) {
+                    console.log(result.rows[0].creatorid + ", " + request.creatorID)
                     response.status(400).send({
                         message: "This user is not the creator"
                     })
@@ -133,8 +134,6 @@ router.put("/:chatId/:memberid", (request, response, next) => {
     //validate email exists 
     let query = 'SELECT * FROM Members WHERE MemberId=$1'
     let values = [request.params.memberid]
-
-console.log(request.decoded)
 
     pool.query(query, values)
         .then(result => {
@@ -316,11 +315,12 @@ router.delete("/:chatId/:email", (request, response, next) => {
                     message: "Chat ID not found"
                 })
             } else {
+                request.creatorid = result.rows[0].creatorid
                 next()
             }
         }).catch(error => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 1",
                 error: error
             })
         })
@@ -336,24 +336,32 @@ router.delete("/:chatId/:email", (request, response, next) => {
                     message: "email not found"
                 })
             } else {
-                request.params.email = result.rows[0].memberid
+                request.chatmemberid = result.rows[0].memberid
                 next()
             }
         }).catch(error => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 2",
                 error: error
             })
         })
 }, (request, response, next) => {
+
         //validate email exists in the chat
         let query = 'SELECT * FROM ChatMembers WHERE ChatId=$1 AND MemberId=$2'
-        let values = [request.params.chatId, request.params.email]
+        let values = [request.params.chatId, request.chatmemberid]
     
         pool.query(query, values)
             .then(result => {
                 if (result.rowCount > 0) {
-                    next()
+                    if (((request.decoded.memberid === request.creatorid)) || (request.chatmemberid === request.decoded.memberid)) {
+                        next()
+                    } else {
+                        response.status(400).send({
+                            message: "User doesn't have permission to remove user from chat"
+                        })
+                    }
+                    
                 } else {
                     response.status(400).send({
                         message: "user not in chat"
@@ -361,7 +369,7 @@ router.delete("/:chatId/:email", (request, response, next) => {
                 }
             }).catch(error => {
                 response.status(400).send({
-                    message: "SQL Error",
+                    message: "SQL Error 3",
                     error: error
                 })
             })
@@ -372,7 +380,7 @@ router.delete("/:chatId/:email", (request, response, next) => {
                   WHERE ChatId=$1
                   AND MemberId=$2
                   RETURNING *`
-    let values = [request.params.chatId, request.params.email]
+    let values = [request.params.chatId, request.chatmemberid]
     pool.query(insert, values)
         .then(result => {
             response.send({
@@ -380,7 +388,7 @@ router.delete("/:chatId/:email", (request, response, next) => {
             })
         }).catch(err => {
             response.status(400).send({
-                message: "SQL Error",
+                message: "SQL Error 4",
                 error: err
             })
         })

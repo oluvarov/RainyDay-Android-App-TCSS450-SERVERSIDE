@@ -48,6 +48,7 @@ router.get('/list', function(req, res, next){
                 } else {
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.contacts = contacts
+                    req.memberid = memberid_a
                     next()
                 }   
 
@@ -57,7 +58,28 @@ router.get('/list', function(req, res, next){
                 console.log(error)
             })
   }, (req, res) => {
-    res.send(req.contacts)
+    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_a = members.memberid WHERE memberid_b=$1'
+    const values = [req.memberid]
+
+    pool.query(theQuery, values)
+            .then(result => { 
+
+                if (result.rowCount == 0) {
+                    res.status(404).send('Contacts not found')
+                    return
+                } else {
+                    const contacts = JSON.stringify(Object.assign({}, result.rows))
+                    req.incoming_requests = contacts
+                    console.log(req.incoming_requests)
+                    res.send(req.contacts + "," + req.incoming_requests)
+                }   
+
+            })
+            .catch((error) => {
+                console.log("contacts geting error")
+                console.log(error)
+            })
+
   })
 
 //send friend request
