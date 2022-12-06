@@ -125,7 +125,7 @@ router.post('/request', function(req, res, next) {
                     console.log("no duplicates")
                     next();
                 } else {
-                        res.status(400).send('Friends request already exist!')
+                        res.status(409).send('Friends request already exist!')
                         return
                 }   
                 
