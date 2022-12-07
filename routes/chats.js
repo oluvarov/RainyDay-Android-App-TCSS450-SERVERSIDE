@@ -66,10 +66,10 @@ router.post("/", (request, response, next) => {
         })
 }, (request, response) => {
     //Insert the memberId into the chat
-    let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
-                  VALUES ($1, $2)
+    let insert = `INSERT INTO ChatMembers(ChatId, MemberId, Role)
+                  VALUES ($1, $2, $3)
                   RETURNING *`
-    let values = [request.chatid, request.decoded.memberid]
+    let values = [request.chatid, request.decoded.memberid, 2]
     pool.query(insert, values)
         .then(result => {
             response.send({
@@ -83,6 +83,97 @@ router.post("/", (request, response, next) => {
             })
         })
     })
+
+/**
+ * @api {post} /chats Request to add a chat
+ * @apiName PostChats
+ * @apiGroup Chats
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {String} name the name for the chat
+ * 
+ * @apiSuccess (Success 201) {boolean} success true when the name is inserted
+ * @apiSuccess (Success 201) {Number} chatId the generated chatId
+ * 
+ * @apiError (400: Unknown user) {String} message "unknown email address"
+ * 
+ * @apiError (400: Missing Parameters) {String} message "Missing required information"
+ * 
+ * @apiError (400: SQL Error) {String} message the reported SQL error details
+ * 
+ * @apiError (400: Unknown Chat ID) {String} message "invalid chat id"
+ * 
+ * @apiUse JSONError
+ */ 
+ router.delete("/", (request, response, next) => {
+    if (isNaN(request.body.chatid)) {
+        response.status(400).send({
+            message: "Missing required information"
+        })
+    } else {
+        next()
+    }
+}, (request, response, next) => {
+    //Find chat
+    let query = 'SELECT * FROM CHATS WHERE chatid = $1 AND creatorid = $2'
+    let values = [request.body.chatid, request.decoded.memberid]
+    pool.query(query, values)
+        .then(result => {
+            if (result.rowCount == 0) {
+                response.status(404).send({
+                    message: "Chat not found or not owned by user"
+                })
+                return
+            } else {
+                request.chatid = request.body.chatid
+                next()
+            }
+            
+           
+        }).catch(err => {
+            response.status(400).send({
+                message: "SQL Error 4",
+                error: err
+            })
+        })
+    }, (request, response, next) => {
+    //Delete chat members
+    let query = 'DELETE FROM CHATMEMBERS WHERE chatid = $1'
+    let values = [request.chatid]
+    pool.query(query, values)
+        .then(result => {
+            request.chatid = request.body.chatid
+            next()
+           
+        }).catch(err => {
+            response.status(400).send({
+                message: "SQL Error 4",
+                error: err
+            })
+        })
+    }, (request, response) => {
+
+    let query = 'DELETE FROM CHATS WHERE chatid = $1 AND creatorid = $2'
+    let values = [request.chatid, request.decoded.memberid]
+    pool.query(query, values)
+        .then(result => {
+            response.status(200).send({
+                success: true,
+                deleted_chatID:request.chatid,
+                message: "Chat deleted, members removed"
+            })
+            // response.send({
+            //     success: true,
+            //     chatID:result.rows[0].chatid
+            // })
+        }).catch(err => {
+            response.status(400).send({
+                message: "SQL Error",
+                error: err
+            })
+
+        })
+})
 
 /**
  * @api {put} /chats/:chatId? Request add a user to a chat
