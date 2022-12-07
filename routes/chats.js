@@ -85,17 +85,16 @@ router.post("/", (request, response, next) => {
     })
 
 /**
- * @api {post} /chats Request to add a chat
- * @apiName PostChats
+ * @api {post} /chats Request to delete a chat
+ * @apiName DeleteChats
  * @apiGroup Chats
  * 
  * @apiHeader {String} authorization Valid JSON Web Token JWT
- * @apiParam {String} name the name for the chat
+ * @apiParam {String} chatid the chatid for the chat
  * 
- * @apiSuccess (Success 201) {boolean} success true when the name is inserted
- * @apiSuccess (Success 201) {Number} chatId the generated chatId
+ * @apiSuccess (Success 201) {boolean} success true when chat found and deleted, members removed
+ * @apiSuccess (Success 201) {Number} chatId for the deleted chat
  * 
- * @apiError (400: Unknown user) {String} message "unknown email address"
  * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
  * 
