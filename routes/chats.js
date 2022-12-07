@@ -43,7 +43,7 @@ router.post("/", (request, response, next) => {
     } else {
         next()
     }
-}, (request, response) => {
+}, (request, response, next) => {
 
     let insert = `INSERT INTO Chats(Name, creatorID)
                   VALUES ($1, $2)
@@ -51,10 +51,12 @@ router.post("/", (request, response, next) => {
     let values = [request.body.name, request.decoded.memberid]
     pool.query(insert, values)
         .then(result => {
-            response.send({
-                success: true,
-                chatID:result.rows[0].chatid
-            })
+            request.chatid = result.rows[0].chatid
+            next()
+            // response.send({
+            //     success: true,
+            //     chatID:result.rows[0].chatid
+            // })
         }).catch(err => {
             response.status(400).send({
                 message: "SQL Error",
@@ -62,7 +64,25 @@ router.post("/", (request, response, next) => {
             })
 
         })
-})
+}, (request, response) => {
+    //Insert the memberId into the chat
+    let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
+                  VALUES ($1, $2)
+                  RETURNING *`
+    let values = [request.chatid, request.decoded.memberid]
+    pool.query(insert, values)
+        .then(result => {
+            response.send({
+                success: true,
+                chatID:request.chatid
+            })
+        }).catch(err => {
+            response.status(400).send({
+                message: "SQL Error 4",
+                error: err
+            })
+        })
+    })
 
 /**
  * @api {put} /chats/:chatId? Request add a user to a chat

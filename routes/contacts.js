@@ -94,7 +94,7 @@ router.get('/list', function(req, res, next){
                 } else {
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.outgoing_requests = contacts
-                    res.send('"friends":' + req.contacts + ',"incoming_requests":' + req.incoming_requests + ',"outgoing_requests":' + req.outgoing_requests)
+                    res.send('{"friends":' + req.contacts + ',"incoming_requests":' + req.incoming_requests + ',"outgoing_requests":' + req.outgoing_requests + '}')
                 }   
 
             })
