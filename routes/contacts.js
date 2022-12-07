@@ -36,15 +36,15 @@ router.get('/list', function(req, res, next){
         res.status(400).send('🚫Bad request!') 
     }
     
-    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_b = members.memberid WHERE memberid_a=$1'
-    const values = [memberid_a]
+    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_b = members.memberid WHERE memberid_a=$1 AND verified=$2'
+    const values = [memberid_a,1]
 
     pool.query(theQuery, values)
             .then(result => { 
 
                 if (result.rowCount == 0) {
-                    res.status(404).send('Contacts not found')
-                    return
+                    req.contacts = 0
+                    next()
                 } else {
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.contacts = contacts
@@ -57,21 +57,44 @@ router.get('/list', function(req, res, next){
                 console.log("contacts geting error")
                 console.log(error)
             })
-  }, (req, res) => {
-    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_a = members.memberid WHERE memberid_b=$1'
-    const values = [req.memberid]
+  }, (req, res, next) => {
+    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_a = members.memberid WHERE memberid_b=$1 AND verified=$2'
+    const values = [req.memberid,0]
 
     pool.query(theQuery, values)
             .then(result => { 
 
                 if (result.rowCount == 0) {
-                    res.status(404).send('Contacts not found')
-                    return
+                    req.incoming_requests = 0
+                    next()
                 } else {
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.incoming_requests = contacts
-                    console.log(req.incoming_requests)
-                    res.send(req.contacts + "," + req.incoming_requests)
+                    next()
+                    //console.log(req.incoming_requests)
+                    //res.send(req.contacts + "," + req.incoming_requests)
+                }   
+
+            })
+            .catch((error) => {
+                console.log("contacts geting error")
+                console.log(error)
+            })
+
+  }, (req, res) => {
+    const theQuery = 'SELECT memberid,username,firstname,lastname,contacts.verified FROM contacts INNER JOIN Members ON contacts.memberid_b = members.memberid WHERE memberid_a=$1 AND verified=$2'
+    const values = [req.memberid,0]
+
+    pool.query(theQuery, values)
+            .then(result => { 
+
+                if (result.rowCount == 0 && req.contacts == 0 && req.incoming_requests == 0) {
+                    res.status(404).send('No entries found')
+                    return
+                } else {
+                    const contacts = JSON.stringify(Object.assign({}, result.rows))
+                    req.outgoing_requests = contacts
+                    res.send('"friends":' + req.contacts + ',"incoming_requests":' + req.incoming_requests + ',"outgoing_requests":' + req.outgoing_requests)
                 }   
 
             })
