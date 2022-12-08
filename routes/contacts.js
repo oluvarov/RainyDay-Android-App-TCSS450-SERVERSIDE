@@ -61,7 +61,6 @@ router.get('/list', function(req, res, next){
     pool.query(theQuery, values)
             .then(result => { 
 
-                
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.incoming_requests = contacts
                     next()
