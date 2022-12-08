@@ -161,8 +161,8 @@ router.post('/request', function(req, res, next) {
 },
  (req, res) => {
     //add request to db
-    let theQuery = "INSERT INTO CONTACTS(memberid_a, memberid_b) VALUES ($1, $2) RETURNING memberid_a, memberid_b, verified"
-    const values = [req.memberid_a,req.memberid_b]
+    let theQuery = "INSERT INTO CONTACTS(memberid_a, memberid_b, verified) VALUES ($1, $2, $3) RETURNING memberid_a, memberid_b, verified"
+    const values = [req.memberid_a,req.memberid_b, 0]
 
     pool.query(theQuery, values)
             .then(result => { 
@@ -228,7 +228,7 @@ router.patch('/request', function(req, res, next) {
     const verified = req.headers.verified;
 
    //check if request exists in db already
-   theQuery = 'SELECT memberid_a, memberid_b, verified FROM CONTACTS WHERE memberid_a = $1 AND memberid_b = $2'
+   theQuery = 'SELECT memberid_a, memberid_b, verified FROM CONTACTS WHERE memberid_a = $2 AND memberid_b = $1'
    const values = [memberid_a, memberid_b]
 
    pool.query(theQuery, values)
@@ -244,11 +244,16 @@ router.patch('/request', function(req, res, next) {
                     success: false,
                     message: 'Nothing to update'
                 })
-               } else {
+               } else if (verified === '1') {
                 req.memberid_a = req.decoded.memberid
                 req.memberid_b = req.headers.memberid_b
                 req.verified = verified
                 next()
+               } else {
+                res.status(400).send({
+                    success: false,
+                    message: 'Invalid input'
+                })
                }
                
            })
@@ -257,7 +262,7 @@ router.patch('/request', function(req, res, next) {
                console.log(error)
            })
 }, (req,res,next) => {
-    const theQuery = 'UPDATE Contacts SET verified= $3 WHERE memberid_a = $1 AND memberid_b = $2'
+    const theQuery = 'UPDATE Contacts SET verified= $3 WHERE memberid_a = $2 AND memberid_b = $1'
     const values = [req.memberid_a,req.memberid_b,req.verified]
 
     pool.query(theQuery, values)
@@ -279,7 +284,8 @@ router.patch('/request', function(req, res, next) {
            })
 }, (req,res,next) => {
 
-    let theQuery = "INSERT INTO CONTACTS(memberid_a, memberid_b, verified) VALUES ($2, $1, $3) RETURNING memberid_a, memberid_b, verified"
+    
+    let theQuery = "INSERT INTO CONTACTS(memberid_a, memberid_b, verified) VALUES ($1, $2, $3) RETURNING memberid_a, memberid_b, verified"
     const values = [req.memberid_a, req.memberid_b, req.verified]
 
     pool.query(theQuery, values)
@@ -287,7 +293,8 @@ router.patch('/request', function(req, res, next) {
                if (result.rowCount == 0) {
                     res.status(404).send({
                         success: false,
-                        message: 'Error 50'
+                        message: 'Error 50',
+                        db: result.rows
                     })
                     return
                } else {
