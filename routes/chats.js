@@ -197,9 +197,9 @@ router.post("/", (request, response, next) => {
  * 
  * @apiUse JSONError
  */ 
-router.put("/:chatId/:memberid", (request, response, next) => {
+router.put("/:chatId/:email", (request, response, next) => {
     //validate on empty parameters
-    if (!request.params.chatId) {
+    if (!request.params.email) {
         response.status(400).send({
             message: "Missing required information"
         })
@@ -242,8 +242,8 @@ router.put("/:chatId/:memberid", (request, response, next) => {
         //code here based on the results of the query
 }, (request, response, next) => {
     //validate email exists 
-    let query = 'SELECT * FROM Members WHERE MemberId=$1'
-    let values = [request.params.memberid]
+    let query = 'SELECT * FROM Members WHERE email=$1'
+    let values = [request.params.email]
 
     pool.query(query, values)
         .then(result => {
@@ -252,6 +252,7 @@ router.put("/:chatId/:memberid", (request, response, next) => {
                     message: "email not found"
                 })
             } else {
+                request.memberid = result.rows[0].memberid
                 //user found
                 next()
             }
@@ -264,7 +265,7 @@ router.put("/:chatId/:memberid", (request, response, next) => {
 }, (request, response, next) => {
         //validate email does not already exist in the chat
         let query = 'SELECT * FROM ChatMembers WHERE ChatId=$1 AND MemberId=$2'
-        let values = [request.params.chatId, request.params.memberid]
+        let values = [request.params.chatId, request.memberid]
     
         pool.query(query, values)
             .then(result => {
@@ -287,7 +288,7 @@ router.put("/:chatId/:memberid", (request, response, next) => {
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
                   VALUES ($1, $2)
                   RETURNING *`
-    let values = [request.params.chatId, request.params.memberid]
+    let values = [request.params.chatId, request.memberid]
     pool.query(insert, values)
         .then(result => {
             response.send({
