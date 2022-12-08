@@ -42,15 +42,12 @@ router.get('/list', function(req, res, next){
     pool.query(theQuery, values)
             .then(result => { 
 
-                if (result.rowCount == 0) {
-                    req.contacts = 0
-                    next()
-                } else {
+                
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.contacts = contacts
                     req.memberid = memberid_a
                     next()
-                }   
+                 
 
             })
             .catch((error) => {
@@ -64,16 +61,13 @@ router.get('/list', function(req, res, next){
     pool.query(theQuery, values)
             .then(result => { 
 
-                if (result.rowCount == 0) {
-                    req.incoming_requests = 0
-                    next()
-                } else {
+                
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.incoming_requests = contacts
                     next()
                     //console.log(req.incoming_requests)
                     //res.send(req.contacts + "," + req.incoming_requests)
-                }   
+                
 
             })
             .catch((error) => {
