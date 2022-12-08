@@ -235,7 +235,7 @@ router.get('/list/chat', function(req, res, next){
         res.status(400).send('🚫Bad request!') 
     }
     
-    const theQuery = 'SELECT chatid FROM chatmembers WHERE memberid=$1'
+    const theQuery = 'SELECT chatid, name FROM chatmembers WHERE memberid=$1'
     const values = [memberid]
 
     pool.query(theQuery, values)
