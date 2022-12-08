@@ -227,6 +227,14 @@ router.patch('/request', function(req, res, next) {
     const memberid_a = req.decoded.memberid;
     const verified = req.headers.verified;
 
+    if (memberid_a == memberid_b) {
+        res.status(400).send({
+            success: false,
+            message: 'Cannot add yourself as a friend'
+        })    
+        return  
+    }
+
    //check if request exists in db already
    theQuery = 'SELECT memberid_a, memberid_b, verified FROM CONTACTS WHERE memberid_a = $2 AND memberid_b = $1'
    const values = [memberid_a, memberid_b]
