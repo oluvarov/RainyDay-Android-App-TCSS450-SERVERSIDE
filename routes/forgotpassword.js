@@ -154,7 +154,7 @@ router.post("/reset", (req, res, next) => {
 
 router.get("/reset", (req, res, next) => {
 
-    const email = req.body.email
+    const email = req.headers.email
 
     if(isStringProvided(email)) {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
@@ -165,11 +165,13 @@ router.get("/reset", (req, res, next) => {
         pool.query(theQuery, values)
             .then(result => {
                 if (result.rowCount == 0) {
+                    
                     res.status(404).send({
                         message: "User Information not found",
                         address: email
                     })
                 }else{
+                    req.email = req.headers.email
                     req.memberid = result.rows[0].memberid
                     next()
                 }
@@ -191,13 +193,12 @@ router.get("/reset", (req, res, next) => {
 
     pool.query(theQuery, values)
     .then(result => {
-        const email = req.body.email
         res.status(201).send({
             success: true,
             message: "New password created",
             newpass: newPassword
         })
-        sendEmail("tcss450chat@gmail.com", email, "Forgot Password", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/' + email +"/"+ newPassword + '">Reset Password</a>')
+        sendEmail("tcss450chat@gmail.com", req.email, "Forgot Password", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/' + req.email +"/"+ newPassword + '">Reset Password</a>')
     })
     .catch((error) => {
         //credentials dod not match
