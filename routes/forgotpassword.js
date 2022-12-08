@@ -41,13 +41,15 @@ const router = express.Router()
 router.post("/", (req, res, next) => {
 
     const email = req.body.email
+    const updatedPassword = req.body.updatedPassword
+    const code = req.body.code
 
     if(isStringProvided(email)) {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                           INNER JOIN Members ON
                           Credentials.memberid=Members.memberid 
-                          WHERE Members.email=$1`
-        const values = [email]
+                          WHERE Members.email=$1, Credentials.code=$2`
+        const values = [email, code]
         pool.query(theQuery, values)
             .then(result => {
                 if (result.rowCount == 0) {
@@ -93,11 +95,9 @@ router.post("/", (req, res, next) => {
     })
 })
 
-//Get the form to update password
-router.post("/reset/:email:code", (req, res, next) => {
+router.get("/reset", (req, res, next) => {
 
-    const code = req.params.code
-    const email = req.params.email
+    const email = req.body.email
 
     if(isStringProvided(email)) {
         const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
@@ -125,13 +125,67 @@ router.post("/reset/:email:code", (req, res, next) => {
 }, (req, res) => {
 
     //let salt = generateSalt(32)
+    let newPassword = Math.random().toString(20).substring(7, 15)
+    //let saltedhash = generateHash(newPassword,salt);
+
+    const theQuery = 'UPDATE Credentials SET temporarypassword=$1 WHERE MemberID = $2'
+    const values = [newPassword, req.memberid]
+
+
+    pool.query(theQuery, values)
+    .then(result => {
+        const email = req.body.email
+        res.status(201).send({
+            success: true,
+            message: "New password created",
+            newpass: newPassword
+        })
+        sendEmail("tcss450chat@gmail.com", email, "Forgot Password", "You have recently requested to reset your password.Your new password is: https://tcss450-weather-chat.herokuapp.com/reset/" + email +"/"+ newPassword)
+    })
+    .catch((error) => {
+        //credentials dod not match
+        res.status(400).send({
+            message: 'Failed' 
+        })
+    })
+})
+
+//Get the form to update password
+router.get("/reset/:email/:code", (req, res, next) => {
+
+    const code = req.params.code
+    const email = req.params.email
+
+    if(isStringProvided(email)) {
+        const theQuery = "SELECT saltedhash, salt, temporarypassword, Credentials.memberid FROM Credentials INNER JOIN Members ON Credentials.memberid=Members.memberid WHERE Members.email=$1 AND Credentials.temporarypassword=$2"
+        const values = [email, code]
+        pool.query(theQuery, values)
+            .then(result => {
+                if (result.rowCount == 0) {
+                    res.status(404).send({
+                        message: "User Information not found",
+                        address: email
+                    })
+                }else{
+                    req.memberid = result.rows[0].memberid
+                    next()
+                }
+            })
+            .catch((error) => {
+                console.log("member lookup")
+                console.log(error)
+            })
+    }
+}, (req, res) => {
+
+    //let salt = generateSalt(32)
     //let newPassword = Math.random().toString(20).substring(7, 15)
     //let saltedhash = generateHash(newPassword,salt);
 
     //const theQuery = 'UPDATE Credentials SET saltedhash= $1, salt= $2 WHERE MemberID = $3'
     //const values = [saltedhash, salt, req.memberid]
-
-    res.render('views/resetpassword');
+    //res.send("Hello")
+    res.render('resetpassword.ejs', {email: req.params.email, code: req.params.code});
     // pool.query(theQuery, values)
     // .then(result => {
     //     const email = req.params.email

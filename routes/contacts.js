@@ -88,14 +88,11 @@ router.get('/list', function(req, res, next){
     pool.query(theQuery, values)
             .then(result => { 
 
-                if (result.rowCount == 0 && req.contacts == 0 && req.incoming_requests == 0) {
-                    res.status(404).send('No entries found')
-                    return
-                } else {
+                
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.outgoing_requests = contacts
                     res.send('{"friends":' + req.contacts + ',"incoming_requests":' + req.incoming_requests + ',"outgoing_requests":' + req.outgoing_requests + '}')
-                }   
+                  
 
             })
             .catch((error) => {

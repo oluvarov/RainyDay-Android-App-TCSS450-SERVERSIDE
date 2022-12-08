@@ -19,6 +19,9 @@ app.use(express.json())
  */
 app.use(middleware.jsonErrorInBody)
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 app.use('/auth', require('./routes/register.js')) 
 app.use('/auth', require('./routes/signin.js')) 
 app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
