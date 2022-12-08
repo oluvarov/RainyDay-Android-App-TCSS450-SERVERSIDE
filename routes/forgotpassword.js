@@ -197,7 +197,7 @@ router.get("/reset", (req, res, next) => {
             message: "New password created",
             newpass: newPassword
         })
-        sendEmail("tcss450chat@gmail.com", email, "Forgot Password", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/">Update password</a>' + email +"/"+ newPassword)
+        sendEmail("tcss450chat@gmail.com", email, "Forgot Password", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/' + email +"/"+ newPassword + '">Reset Password</a>')
     })
     .catch((error) => {
         //credentials dod not match
