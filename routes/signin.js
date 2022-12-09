@@ -72,7 +72,7 @@ router.get('/', (request, response, next) => {
         })
     }
 }, (request, response) => {
-    const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
+    const theQuery = `SELECT saltedhash, salt, Credentials.memberid, Members.firstname, Members.lastname FROM Credentials
                       INNER JOIN Members ON
                       Credentials.memberid=Members.memberid 
                       WHERE Members.email=$1`
@@ -101,7 +101,9 @@ router.get('/', (request, response, next) => {
                 let token = jwt.sign(
                     {
                         "email": request.auth.email,
-                        "memberid": result.rows[0].memberid
+                        "memberid": result.rows[0].memberid,
+                        "firstname": result.rows[0].firstname,
+                        "lastname": result.rows[0].lastname
                     },
                     config.secret,
                     { 
