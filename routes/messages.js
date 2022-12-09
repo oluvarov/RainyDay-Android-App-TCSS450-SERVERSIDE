@@ -108,9 +108,10 @@ router.post("/", (request, response, next) => {
                 //result.rows[0].lastName = request.decoded.lastName
                 response.message = result.rows[0]
                 response.message.email = request.decoded.email
-                response.message.firstName = request.decoded.firstName
-                response.message.lastName = request.decoded.lastName
-                console.log(response.message)
+                response.message.firstname = request.decoded.firstname
+                response.message.lastname = request.decoded.lastname
+                //console.log(request.decoded.firstname)
+                //console.log(response.message)
                 //Pass on to next to push
                 next()
             } else {
@@ -142,10 +143,7 @@ router.post("/", (request, response, next) => {
                         entry.token, 
                         response.message))
                 response.send({
-                    success:true,
-                    mes: response.message,
-                    "fn": response.message.firstName,
-                    "em": response.message.email
+                    success:true
                 })
             }).catch(err => {
 
