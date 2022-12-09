@@ -144,7 +144,8 @@ router.post("/", (request, response, next) => {
                 response.send({
                     success:true,
                     mes: response.message,
-                    fn: response.message.firstName
+                    "fn": response.message.firstName,
+                    "em": response.message.email
                 })
             }).catch(err => {
 
