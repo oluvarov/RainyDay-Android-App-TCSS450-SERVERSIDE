@@ -95,8 +95,23 @@ router.get('/list', function(req, res, next){
 
   })
 
-//send friend request
-//TODO: APIDOC
+/**
+ * @api {post} contacts/request Request to send friend request
+ * @apiName postRequest
+ * @apiGroup Contacts
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {String} email email of user
+ * 
+ * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
+ * 
+ * @apiError (400: Bad Request) {String} message "🚫Bad request!"
+ * @apiErorr (404: Missing Parameters) {String} message "invalid input, error 22"
+ * @apiError (409: Conflict) {String} message "request already exists"
+ * 
+ * 
+ * @apiUse JSONError
+ */ 
 router.post('/request', function(req, res, next) {
     //get user info by email
     const email = req.headers.email;
@@ -178,6 +193,23 @@ router.post('/request', function(req, res, next) {
 
 })
 
+/**
+ * @api {get} contacts/request get friend request
+ * @apiName getRequest
+ * @apiGroup Contacts
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {String} memberid_a memberid of user
+ * @apiParam {String} memberid_b memberid of another user
+ * 
+ * @apiError (404: Request not found) {String} message "Request not found"
+ * 
+ * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
+ * 
+ * 
+ * @apiUse JSONError
+ */ 
+
 router.get('/request', function(req, res) {
     //get user info by email
     const memberid_b = req.headers.memberid_b;
@@ -211,6 +243,22 @@ router.get('/request', function(req, res) {
            })
 })
 
+/**
+ * @api {patch} contacts/request accept friend request
+ * @apiName patchRequest
+ * @apiGroup Contacts
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {String} memberid_a memberid of user
+ * @apiParam {String} memberid_b memberid of another user
+ * @apiParam {String} verified 0 for request, 1 for friend
+ * @apiError (404: Request not found) {String} message "Request not found"
+ * 
+ * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
+ * 
+ * 
+ * @apiUse JSONError
+ */ 
 router.patch('/request', function(req, res, next) {
     //get user info by email
     const memberid_b = req.headers.memberid_b;

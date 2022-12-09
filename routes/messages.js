@@ -103,16 +103,10 @@ router.post("/", (request, response, next) => {
     pool.query(insert, values)
         .then(result => {
             if (result.rowCount == 1) {
-                //insertion success. Attach the message to the Response obj
-                //result.rows[0].firstName = request.decoded.firstName
-                //result.rows[0].lastName = request.decoded.lastName
                 response.message = result.rows[0]
                 response.message.email = request.decoded.email
                 response.message.firstname = request.decoded.firstname
                 response.message.lastname = request.decoded.lastname
-                //console.log(request.decoded.firstname)
-                //console.log(response.message)
-                //Pass on to next to push
                 next()
             } else {
                 response.status(400).send({

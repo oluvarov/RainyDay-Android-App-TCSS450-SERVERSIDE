@@ -229,6 +229,21 @@ router.get('/', function(req, res){
             })
   })    
 
+  /**
+ * @api {get} /user/list/chat Request to list chats
+ * @apiName getUserChatList
+ * @apiGroup user
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {Number} memberid of user
+ * 
+ * @apiSuccess (Success 200) {String} chatid id of chat
+ * 
+ * @apiError (404: Not Found) {String} message "Chats not found"
+ * @apiError (400: Bad Request) {String} message "Bad request"
+ * 
+ * @apiUse JSONError
+ */ 
 router.get('/list/chat', function(req, res, next){
     const memberid = req.headers.memberid;
     if (memberid.length < 1) {

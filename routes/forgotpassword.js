@@ -94,6 +94,27 @@ router.post("/", (req, res, next) => {
     })
 })
 
+/**
+ * @api {post} /forgotpassword/reset Request to reset password
+ * @apiName PostResetPassword
+ * @apiGroup forgotpassword
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiParam {String} email of user
+ * @apiParam {String} code of user
+ * 
+ * @apiSuccess (Success 201) {boolean} success true when the new password is created
+ * @apiSuccess (Success 201) {String} message "New password created"
+ * 
+ * 
+ * @apiError (404: Not Found) {String} message "User Information not found"
+ * 
+ * @apiError (400: SQL Error) {String} message "Failed"
+ * 
+ * 
+ * @apiUse JSONError
+ */ 
+
 router.post("/reset", (req, res, next) => {
 
     const email = req.body.email
@@ -236,30 +257,7 @@ router.get("/reset/:email/:code", (req, res, next) => {
     }
 }, (req, res) => {
 
-    //let salt = generateSalt(32)
-    //let newPassword = Math.random().toString(20).substring(7, 15)
-    //let saltedhash = generateHash(newPassword,salt);
-
-    //const theQuery = 'UPDATE Credentials SET saltedhash= $1, salt= $2 WHERE MemberID = $3'
-    //const values = [saltedhash, salt, req.memberid]
-    //res.send("Hello")
     res.render('resetpassword.ejs', {email: req.params.email, code: req.params.code});
-    // pool.query(theQuery, values)
-    // .then(result => {
-    //     const email = req.params.email
-    //     res.status(201).send({
-    //         success: true,
-    //         message: "New password created",
-    //         newpass: newPassword
-    //     })
-    //     sendEmail("tcss450chat@gmail.com", email, "Forgot Password", "You have recently requested to reset your password.Your new password is: " + newPassword)
-    // })
-    // .catch((error) => {
-    //     //credentials dod not match
-    //     res.status(400).send({
-    //         message: 'Failed' 
-    //     })
-    // })
 })
 
 
