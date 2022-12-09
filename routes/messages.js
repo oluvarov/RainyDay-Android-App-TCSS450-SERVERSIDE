@@ -98,7 +98,7 @@ router.post("/", (request, response, next) => {
     //add the message to the database
     let insert = `INSERT INTO Messages(ChatId, Message, MemberId)
                   VALUES($1, $2, $3) 
-                  RETURNING PrimaryKey AS MessageId, ChatId, Message, MemberId AS email, TimeStamp,  MemberId AS FirstName, MemberId AS LastName`
+                  RETURNING PrimaryKey AS MessageId, ChatId, Message, MemberId AS email, TimeStamp,  MemberId AS firstName, MemberId AS lastName`
     let values = [request.body.chatId, request.body.message, request.decoded.memberid]
     pool.query(insert, values)
         .then(result => {
