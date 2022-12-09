@@ -110,6 +110,7 @@ router.post("/", (request, response, next) => {
                 response.message.email = request.decoded.email
                 response.message.firstName = request.decoded.firstName
                 response.message.lastName = request.decoded.lastName
+                console.log(response.message)
                 //Pass on to next to push
                 next()
             } else {
@@ -141,7 +142,9 @@ router.post("/", (request, response, next) => {
                         entry.token, 
                         response.message))
                 response.send({
-                    success:true
+                    success:true,
+                    mes: response.message,
+                    fn: response.message.firstName
                 })
             }).catch(err => {
 
