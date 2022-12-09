@@ -104,6 +104,8 @@ router.post("/", (request, response, next) => {
         .then(result => {
             if (result.rowCount == 1) {
                 //insertion success. Attach the message to the Response obj
+                result.rows[0].firstName = request.decoded.firstName
+                result.rows[0].lastName = request.decoded.lastName
                 response.message = result.rows[0]
                 response.message.email = request.decoded.email
                 response.message.firstName = request.decoded.firstName
@@ -133,6 +135,7 @@ router.post("/", (request, response, next) => {
             .then(result => {
                 console.log(request.decoded.email)
                 console.log(request.body.message)
+                console.log(response.message)
                 result.rows.forEach(entry => 
                     msg_functions.sendMessageToIndividual(
                         entry.token, 
