@@ -227,7 +227,7 @@ router.put("/:chatId/:email", (request, response, next) => {
                 if (result.rows[0].creatorid !== request.creatorID) {
                     console.log(result.rows[0].creatorid + ", " + request.creatorID)
                     response.status(400).send({
-                        message: "This user is not the creator"
+                        message: "User doesn't have permission to add member to chat"
                     })
                     return
                 }
@@ -469,7 +469,7 @@ router.delete("/:chatId/:email", (request, response, next) => {
                         next()
                     } else {
                         response.status(400).send({
-                            message: "User doesn't have permission to remove user from chat"
+                            message: "User doesn't have permission to remove member from chat"
                         })
                     }
                     
