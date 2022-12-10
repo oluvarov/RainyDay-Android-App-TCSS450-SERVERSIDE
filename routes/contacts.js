@@ -152,14 +152,14 @@ router.post('/request', function(req, res, next) {
                 if (result.rowCount == 0) {
                     console.log("no duplicates")
                     if (req.memberid_a == req.memberid_b) {
-                        res.status(409).send('You cannot send request to yourself!')
+                        res.status(408).send('You cannot send request to yourself!')
                         return
                     } else {
                         next();
                     }
                     
                 } else {
-                        res.status(409).send('User friend exist')
+                        res.status(409).send('Friend request already exists')
                         return
                 }   
                 
