@@ -151,7 +151,13 @@ router.post('/request', function(req, res, next) {
             .then(result => { 
                 if (result.rowCount == 0) {
                     console.log("no duplicates")
-                    next();
+                    if (req.memberid_a == req.memberid_b) {
+                        res.status(409).send('You cannot send request to yourself!')
+                        return
+                    } else {
+                        next();
+                    }
+                    
                 } else {
                         res.status(409).send('Friends request already exist!')
                         return
@@ -363,6 +369,14 @@ router.patch('/request', function(req, res, next) {
 router.delete('/request', function(req, res, next) {
     const memberid_b = req.headers.memberid_b;
     const memberid_a = req.decoded.memberid;
+
+    if (memberid_a == memberid_b) {
+        res.status(400).send({
+            success: false,
+            message: 'Cannot delete yourself'
+        })    
+        return  
+    }
     let theQuery = "DELETE FROM CONTACTS WHERE memberid_a = $1 AND memberid_b = $2"
     const values = [memberid_a, memberid_b]
 
