@@ -122,7 +122,7 @@ router.post('/request', function(req, res, next) {
     pool.query(theQuery, values)
             .then(result => { 
                 if (result.rowCount == 0) {
-                    res.status(404).send('invalid input, error 22')
+                    res.status(404).send('User is not found')
                     return
                 } else {
                         req.memberid_a = req.decoded.memberid
@@ -159,7 +159,7 @@ router.post('/request', function(req, res, next) {
                     }
                     
                 } else {
-                        res.status(409).send('Friends request already exist!')
+                        res.status(409).send('User friend exist')
                         return
                 }   
                 
