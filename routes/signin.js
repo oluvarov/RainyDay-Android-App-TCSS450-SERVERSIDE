@@ -117,7 +117,8 @@ router.get('/', (request, response, next) => {
                 response.json({
                     success: true,
                     message: 'Authentication successful!',
-                    token: token
+                    token: token,
+                    memberid: result.rows[0].memberid
                 })
             } else {
                 //credentials dod not match
