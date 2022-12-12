@@ -148,7 +148,21 @@ router.post("/", (request, response, next) => {
                 error: err
             })
         })
-    }, (request, response, next) => {
+    },(request, response, next) => {
+        //Delete chat members
+        let query = 'DELETE FROM MESSAGES WHERE chatid = $1'
+        let values = [request.chatid]
+        pool.query(query, values)
+            .then(result => {
+                next()
+               
+            }).catch(err => {
+                response.status(400).send({
+                    message: "SQL Error 3.5",
+                    error: err
+                })
+            })
+        }, (request, response, next) => {
     //Delete chat members
     let query = 'DELETE FROM CHATMEMBERS WHERE chatid = $1'
     let values = [request.chatid]
