@@ -25,6 +25,13 @@ let isStringProvided = validation.isStringProvided
  * @apiSuccess (Success 201) {boolean} success true when the name is inserted
  * @apiSuccess (Success 201) {Number} chatId the generated chatId
  * 
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 201 OK
+ *   {
+ *      "success": true,
+ *     "chatID": 1
+ *  }
+ * 
  * @apiError (400: Unknown user) {String} message "unknown email address"
  * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
@@ -53,10 +60,6 @@ router.post("/", (request, response, next) => {
         .then(result => {
             request.chatid = result.rows[0].chatid
             next()
-            // response.send({
-            //     success: true,
-            //     chatID:result.rows[0].chatid
-            // })
         }).catch(err => {
             response.status(400).send({
                 message: "SQL Error",
@@ -95,6 +98,13 @@ router.post("/", (request, response, next) => {
  * @apiSuccess (Success 201) {boolean} success true when chat found and deleted, members removed
  * @apiSuccess (Success 201) {Number} chatId for the deleted chat
  * 
+ * @apiSuccessExample {json} Success-Response: 
+ *   HTTP/1.1 201 OK
+ *  {
+ *     "success": true,
+ *     "chatID": 1,
+ *    "message": "Chat deleted, members removed"
+ * }
  * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
  * 
@@ -161,10 +171,6 @@ router.post("/", (request, response, next) => {
                 deleted_chatID:request.chatid,
                 message: "Chat deleted, members removed"
             })
-            // response.send({
-            //     success: true,
-            //     chatID:result.rows[0].chatid
-            // })
         }).catch(err => {
             response.status(400).send({
                 message: "SQL Error",
@@ -184,8 +190,15 @@ router.post("/", (request, response, next) => {
  * @apiHeader {String} authorization Valid JSON Web Token JWT
  * 
  * @apiParam {Number} chatId the chat to add the user to
+ * @apiParam {String} email the email of the user to add
  * 
  * @apiSuccess {boolean} success true when the name is inserted
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *   {
+ *    "success": true
+ *   }
  * 
  * @apiError (404: Chat Not Found) {String} message "chatID not found"
  * @apiError (404: Email Not Found) {String} message "email not found"
@@ -314,7 +327,13 @@ router.put("/:chatId/:email", (request, response, next) => {
  * 
  * @apiSuccess {Number} rowCount the number of messages returned
  * @apiSuccess {Object[]} members List of members in the chat
- * @apiSuccess {String} messages.email The email for the member in the chat
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *  {
+ *   "rowCount": 2,
+ *    "members": []
+ * }
  * 
  * @apiError (404: ChatId Not Found) {String} message "Chat ID Not Found"
  * @apiError (400: Invalid Parameter) {String} message "Malformed parameter. chatId must be a number" 
@@ -390,6 +409,12 @@ router.get("/:chatId", (request, response, next) => {
  * @apiParam {String} email the email of the user to delete
  * 
  * @apiSuccess {boolean} success true when the name is deleted
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *  HTTP/1.1 200 OK
+ * {
+ *  "success": true
+ * }
  * 
  * @apiError (404: Chat Not Found) {String} message "chatID not found"
  * @apiError (404: Email Not Found) {String} message "email not found"

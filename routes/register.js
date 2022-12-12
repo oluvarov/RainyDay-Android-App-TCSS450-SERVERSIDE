@@ -126,9 +126,6 @@ const router = express.Router()
                 sendEmail("tcss450chat@gmail.com", request.body.email, "Welcome to our App! ", 'Please, use link below to verify your email. \n https://tcss450-weather-chat.herokuapp.com/verification/?code=' + request.uniqueCode)
             })
             .catch((error) => {
-                //log the error for debugging
-                // console.log("PWD insert")
-                // console.log(error)
 
                 /***********************************************************************
                  * If we get an error inserting the PWD, we should go back and remove
@@ -143,21 +140,6 @@ const router = express.Router()
                 })
             })
 })
-
-
-// router.get('/hash_demo', (request, response) => {
-//     let password = 'hello12345'
-
-//     let salt = generateSalt(32)
-//     let salted_hash = generateHash(password, salt)
-//     let unsalted_hash = generateHash(password)
-
-//     response.status(200).send({
-//         'salt': salt,
-//         'salted_hash': salted_hash,
-//         'unsalted_hash': unsalted_hash
-//     })
-// })
 
 
 module.exports = router

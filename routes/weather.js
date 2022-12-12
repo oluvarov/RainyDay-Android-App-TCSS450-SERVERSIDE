@@ -17,10 +17,10 @@ const router = express.Router()
  * @api {get} /current
  * @apiName getCurrentWeather
  * @apiGroup Weather
- * @apiParam ip
- * @apiParam zip
- * @apiParam lat
- * @apiParam lon
+ * @apiHeader ip {String} ip address
+ * @apiHeader zip {Number} zip code
+ * @apiHeader lat {String} latitude
+ * @apiHeader lon {String} longitude
  * 
  * @apiSuccess {json} success when weather received from externalapi
  * 
@@ -90,10 +90,10 @@ router.get('/current', function(req, res, next){
  * @api {get} /forecast
  * @apiName getForecast
  * @apiGroup Weather
- * @apiParam ip
- * @apiParam zip
- * @apiParam lat
- * @apiParam lon
+ * @apiHeader ip {String} ip address
+ * @apiHeader zip {Number} zip code
+ * @apiHeader lat {String} latitude
+ * @apiHeader lon {String} longitude
  * @apiSuccess {json} success when weather received from externalapi
  * 
  * 
@@ -161,10 +161,10 @@ router.get('/forecast', function(req, res, next){
  * @api {get} /today
  * @apiName getTodaysWeather
  * @apiGroup Weather
- * @apiParam ip
- * @apiParam zip
- * @apiParam lat
- * @apiParam lon
+ * @apiHeader ip {String} ip address
+ * @apiHeader zip {Number} zip code
+ * @apiHeader lat {String} latitude
+ * @apiHeader lon {String} longitude
  * 
  * @apiSuccess {json} success when weather received from externalapi
  * 

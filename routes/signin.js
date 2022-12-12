@@ -110,9 +110,6 @@ router.get('/', (request, response, next) => {
                         expiresIn: '14 days' // expires in 14 days
                     }
                 )
-                //const generateString = Math.random().toString(36).substring(2,15);
-              //  var uniqueCode = generateString
-               // sendEmail("tcss450chat@gmail.com", request.auth.email, "Welcome to our App!", '<a href = www.google.com/' + uniqueCode + '> Please verify your Email account. </a>')
                 //package and send the results
                 response.json({
                     success: true,

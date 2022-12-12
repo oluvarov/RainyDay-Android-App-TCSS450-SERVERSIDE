@@ -22,6 +22,14 @@ const router = express.Router()
  * 
  * @apiSuccess (200: Success) {JSON} contacts json array
  * 
+ *  @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *   {
+ *     "contacts": [],
+ *     "incoming_requests": [],
+ *     "outgoing_requests": []
+ *    }
+ * 
  * @apiError (400: Bad Request) {String} message "🚫Bad request!"
  * 
  * @apiError (404: Missing Parameters) {String} message "Contacts not found"
@@ -41,14 +49,12 @@ router.get('/list', function(req, res, next){
 
     pool.query(theQuery, values)
             .then(result => { 
-
                 
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.contacts = contacts
                     req.memberid = memberid_a
                     next()
                  
-
             })
             .catch((error) => {
                 console.log("contacts geting error")
@@ -64,10 +70,7 @@ router.get('/list', function(req, res, next){
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.incoming_requests = contacts
                     next()
-                    //console.log(req.incoming_requests)
-                    //res.send(req.contacts + "," + req.incoming_requests)
                 
-
             })
             .catch((error) => {
                 console.log("contacts geting error")
@@ -81,11 +84,9 @@ router.get('/list', function(req, res, next){
     pool.query(theQuery, values)
             .then(result => { 
 
-                
                     const contacts = JSON.stringify(Object.assign({}, result.rows))
                     req.outgoing_requests = contacts
                     res.send('{"friends":' + req.contacts + ',"incoming_requests":' + req.incoming_requests + ',"outgoing_requests":' + req.outgoing_requests + '}')
-                  
 
             })
             .catch((error) => {
@@ -104,6 +105,14 @@ router.get('/list', function(req, res, next){
  * @apiParam {String} email email of user
  * 
  * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *  {
+ *   "memberid_a": 1,
+ *   "memberid_b": 2,
+ *   "verified": 0
+ * }
  * 
  * @apiError (400: Bad Request) {String} message "🚫Bad request!"
  * @apiErorr (404: Missing Parameters) {String} message "invalid input, error 22"
@@ -212,6 +221,14 @@ router.post('/request', function(req, res, next) {
  * 
  * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
  * 
+ * @apiSuccessExample {json} Success-Response:
+ *  HTTP/1.1 200 OK
+ * {
+ *  "memberid_a": 1,
+ *  "memberid_b": 2,
+ *  "verified": 0
+ * }
+ * 
  * 
  * @apiUse JSONError
  */ 
@@ -261,6 +278,13 @@ router.get('/request', function(req, res) {
  * @apiError (404: Request not found) {String} message "Request not found"
  * 
  * @apiSuccess (200: Success) {JSON} memberid_a memberid of user, memberid_b memberid of friend, verified
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ * "success": true,
+ *  message: 'Request accepted, new entry member_b->member_a created'
+ * }
  * 
  * 
  * @apiUse JSONError
@@ -365,7 +389,20 @@ router.patch('/request', function(req, res, next) {
 
 
 })
-//deleting friend request
+
+/**
+ * @api {delete} contacts/request delete friend request
+ * @apiName deleteRequest
+ * @apiGroup Contacts
+ * 
+ * @apiHeader {String} authorization Valid JSON Web Token JWT
+ * @apiHeader {String} memberid_b memberid of another user
+ * 
+ * @apiSuccess (200: Success) {JSON} success: true, message: "Friend Deleted"
+ * 
+ * @apiError (404: Request not found) {String} message "Nothing to delete"
+ * @apiError (400: Cannot delete yourself) {String} message "Cannot delete yourself"
+ */
 router.delete('/request', function(req, res, next) {
     const memberid_b = req.headers.memberid_b;
     const memberid_a = req.decoded.memberid;
@@ -427,7 +464,29 @@ router.delete('/request', function(req, res, next) {
                console.log(error)
            })
 })
-//find contact by email
+
+/**
+ * @api {get} contact by email
+ * @apiName getContactByEmail
+ * @apiGroup Contacts
+ * 
+ * @apiSuccess (200: Success) {JSON} success: true, memberid_b, username, firstname, lastname, email
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *   {
+ *     "success": true,
+ *    "memberid_b": 1,
+ *    "username
+ *    "firstname": "John",
+ *   "lastname": "Doe",
+ *   "email": "
+ *  }
+ * 
+ * @apiHeader {string} email email of the user
+ * @apiError (404) {String} success: false, message "User not found"
+ * 
+ */
 router.get('/', function(req, res, next) {
     //get user info by email
     const email = req.headers.email;

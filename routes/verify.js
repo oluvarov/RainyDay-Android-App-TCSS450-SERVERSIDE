@@ -20,7 +20,7 @@ const router = express.Router()
  * @apiSuccess {boolean} success true when the email is found and code matched.
  * @apiSuccess {String} message "✅Your email was successfully verified!"
  * 
- *  * @apiSuccessExample {html} Success-Response:
+ *  @apiSuccessExample {html} Success-Response:
  *     HTTP/1.1 200 OK
  *       <h3>✅Your email was successfully verified!</h3>
  * 
@@ -76,7 +76,7 @@ router.get('/', function(req, res, next){
  * @apiSuccess {boolean} success true when the email is found and code matched.
  * @apiSuccess {String} message "✅Your email was successfully verified!"
  * 
- *  * @apiSuccessExample {string} Success-Response:
+ *  @apiSuccessExample {string} Success-Response:
  *     HTTP/1.1 200 OK
  *       'Verified'
  * 

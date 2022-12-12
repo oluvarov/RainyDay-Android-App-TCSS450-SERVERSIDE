@@ -23,13 +23,14 @@ const router = express.Router()
 /**
  * @api {get} /user/update/name/ request to update name
  * @apiName updateName
- * @apiGroup update
- * @apiParam fistname, lastname
+ * @apiGroup user
+ * @apiHeader {String} firstname new firstname
+ * @apiHeader {String} lastname new lastname
  * 
  * @apiSuccess {boolean} success true when the email is found and code matched.
  * @apiSuccess {json} message {success: true}
  * 
- *  * @apiSuccessExample {json} Success-Response:
+ * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *       {success: true}
  * 
@@ -91,12 +92,13 @@ router.post('/update/name', function(req, res, next){
  * @api {get} /user/update/password request to update password
  * @apiName updatePassword
  * @apiGroup user
- * @apiParam oldPassword, newPassword
+ * @apiParam {String} oldPassword old password
+ * @apiParam {String} newPassword new password
  * 
  * @apiSuccess {boolean} success true when the password updated
  * @apiSuccess {json} message {success: true}
  * 
- *  * @apiSuccessExample {json} Success-Response:
+ * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *       {success: true}
  * 
@@ -122,8 +124,6 @@ router.post('/update/password', (req, res, next) => {
     
   }, (req, res, next) => {
     const memberid = req.memberid;
-    //const oldPassword = req.oldPassword;
-    //const newPassword = req.newPassword;
 
     const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
                       INNER JOIN Members ON
@@ -157,7 +157,6 @@ router.post('/update/password', (req, res, next) => {
     newPassword = req.newPassword;
     memberid = req.memberid;
 
-    //res.status(200).send('pong_last' + newPassword + " mem: " + memberid)
 
     let salt = generateSalt(32)
     let salted_hash = generateHash(newPassword, salt)
@@ -188,12 +187,13 @@ router.post('/update/password', (req, res, next) => {
  * @api {get} / request to get user information
  * @apiName getUser
  * @apiGroup user
- * @apiParam memberid
+ * 
+ * @apiHeader {String} authorization valid JSON Web Token JWT
  * 
  * @apiSuccess {boolean} success true when user exists, token provided.
  * @apiSuccess {json} message {success: true}
  * 
- *  * @apiSuccessExample {json} Success-Response:
+ * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *       {success: true}
  * 
@@ -229,13 +229,13 @@ router.get('/', function(req, res){
             })
   })    
 
-  /**
+/**
  * @api {get} /user/list/chat Request to list chats
  * @apiName getUserChatList
  * @apiGroup user
  * 
  * @apiHeader {String} authorization Valid JSON Web Token JWT
- * @apiParam {Number} memberid of user
+ * @apiHeader {Number} memberid of user
  * 
  * @apiSuccess (Success 200) {String} chatid id of chat
  * 
