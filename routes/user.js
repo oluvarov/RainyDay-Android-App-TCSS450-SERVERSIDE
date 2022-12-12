@@ -8,6 +8,7 @@ const url = require('url');
 const querystring = require('querystring');
 const { nextTick } = require('process');
 const e = require('express');
+const { isValidPassword } = require('../utilities/validationUtils');
 
 const generateHash = require('../utilities').generateHash
 const generateSalt = require('../utilities').generateSalt
@@ -107,7 +108,7 @@ router.post('/update/name', function(req, res, next){
  */ 
 router.post('/update/password', (req, res, next) => {
 
-    if (!isStringProvided(req.header("oldPassword")) || !isStringProvided(req.header("newPassword"))) {
+    if (!isStringProvided(req.header("oldPassword")) || !isStringProvided(req.header("newPassword")) || !isValidPassword(req.header("newPassword"))) {
         res.status(400).send('Missing information')
         return
     } else 
