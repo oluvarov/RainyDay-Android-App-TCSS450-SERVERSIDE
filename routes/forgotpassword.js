@@ -52,7 +52,7 @@ router.post("/reset", (req, res, next) => {
     const email = req.body.email
     req.updatedPassword = req.body.updatedPassword
     const code = req.body.code
-    const regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$)$"
+    const regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/"
     if (!req.updatedPassword.match(regex)) {
         res.status(400).send({
             message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
