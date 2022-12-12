@@ -125,7 +125,7 @@ router.post('/update/password', (req, res, next) => {
   }, (req, res, next) => {
     const memberid = req.memberid;
 
-    const theQuery = `SELECT saltedhash, salt, Credentials.memberid FROM Credentials
+    const theQuery = `SELECT saltedhash, salt, Credentials.memberid, members.email FROM Credentials
                       INNER JOIN Members ON
                       Credentials.memberid=Members.memberid 
                       WHERE Members.memberid=$1`
@@ -138,6 +138,7 @@ router.post('/update/password', (req, res, next) => {
                 })
                 return
             }
+            req.email = result.rows[0].email
             //Retrieve the salt used to create the salted-hash provided from the DB
             let salt = result.rows[0].salt
             
@@ -167,6 +168,8 @@ router.post('/update/password', (req, res, next) => {
     pool.query(theQuery, values)
         .then(result => {
             //We successfully added the user!
+            //Send an email to the user with their new password
+            sendEmail("tcss450chat@gmail.com", email, "You password was updated in 🌦️RainyDay Chat", "You have recently updated your password. If you did not do this, please reset your password and make sure that your account is secure.")
             res.status(200).send({
                 success: true
             })
