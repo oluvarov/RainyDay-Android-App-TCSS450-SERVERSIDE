@@ -131,6 +131,8 @@ router.post("/", (request, response, next) => {
         .then(result => {
             if (result.rowCount == 0) {
                 response.status(404).send({
+                    chatid: request.chatid,
+                    memberid: request.decoded.memberid,
                     message: "Chat not found or not owned by user"
                 })
                 return
