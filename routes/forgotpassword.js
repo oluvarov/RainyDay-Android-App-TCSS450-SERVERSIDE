@@ -8,6 +8,7 @@ const url = require('url');
 const querystring = require('querystring');
 const { nextTick } = require('process');
 const e = require('express');
+const { checkPassword, isValidPassword } = require('../utilities/validationUtils');
 
 const generateHash = require('../utilities').generateHash
 const generateSalt = require('../utilities').generateSalt
@@ -51,12 +52,13 @@ router.post("/reset", (req, res, next) => {
 
     const email = req.body.email
     req.updatedPassword = req.body.updatedPassword
+    updatedPassword = req.updatedPassword
     const code = req.body.code
-    const regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{4,}$/"
-    if (!req.updatedPassword.match(regex)) {
+    if (!isValidPassword(updatedPassword)) {
         res.status(400).send({
             message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"
         })
+        return
     }
 
     console.log(req.body)

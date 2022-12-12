@@ -2,6 +2,7 @@
 const { response } = require('express')
 const { request } = require('express')
 const express = require('express')
+const { isValidPassword, isValidEmail } = require('../utilities/validationUtils')
 
 //Access the connection to Heroku Database
 const pool = require('../utilities').pool
@@ -70,6 +71,13 @@ const router = express.Router()
         && isStringProvided(username) 
         && isStringProvided(email) 
         && isStringProvided(password)) {
+
+            if (!isValidPassword(password) || ! isValidEmail(email)){
+                response.status(400).send({
+                    message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character. Email must be valid email format (ex: John123@gmail.com)."
+                })
+                return
+            }
         
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
         //If you want to read more: https://stackoverflow.com/a/8265319
