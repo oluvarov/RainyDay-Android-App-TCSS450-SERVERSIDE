@@ -115,14 +115,15 @@ router.post("/", (request, response, next) => {
  * @apiUse JSONError
  */ 
  router.delete("/", (request, response, next) => {
-    request.chatid = request.body.chatid
-    //if (isNaN(request.body.chatid)) {
-     //   response.status(400).send({
-     //       message: "Missing required information"
-      //  })
-    //} else {
+    chatid = request.headers.chatid
+    request.chatid = chatid
+    if (isNaN(chatid)) {
+       response.status(400).send({
+           message: "Missing required information"
+       })
+    } else {
         next()
-    //}
+    }
 }, (request, response, next) => {
     //Find chat
     let query = 'SELECT * FROM CHATS WHERE chatid = $1 AND creatorid = $2'
