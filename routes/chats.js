@@ -115,18 +115,18 @@ router.post("/", (request, response, next) => {
  * @apiUse JSONError
  */ 
  router.delete("/", (request, response, next) => {
-    request.body.chatid = parseInt(request.body.chatid)
-    if (isNaN(request.body.chatid)) {
-        response.status(400).send({
-            message: "Missing required information"
-        })
-    } else {
+    request.chatid = request.body.chatid
+    //if (isNaN(request.body.chatid)) {
+     //   response.status(400).send({
+     //       message: "Missing required information"
+      //  })
+    //} else {
         next()
-    }
+    //}
 }, (request, response, next) => {
     //Find chat
     let query = 'SELECT * FROM CHATS WHERE chatid = $1 AND creatorid = $2'
-    let values = [request.body.chatid, request.decoded.memberid]
+    let values = [request.chatid, request.decoded.memberid]
     pool.query(query, values)
         .then(result => {
             if (result.rowCount == 0) {
@@ -135,7 +135,6 @@ router.post("/", (request, response, next) => {
                 })
                 return
             } else {
-                request.chatid = request.body.chatid
                 next()
             }
             
@@ -152,7 +151,6 @@ router.post("/", (request, response, next) => {
     let values = [request.chatid]
     pool.query(query, values)
         .then(result => {
-            request.chatid = request.body.chatid
             next()
            
         }).catch(err => {
