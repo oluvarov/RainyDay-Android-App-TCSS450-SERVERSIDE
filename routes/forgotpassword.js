@@ -100,7 +100,7 @@ router.post("/reset", (req, res, next) => {
         const email = req.body.email
         res.status(201).send({
             success: true,
-            message: "New password created",
+            message: "New password created for 🌦️RainyDay",
         })
         sendEmail("tcss450chat@gmail.com", email, "You password was updated", "You have recently updated your password. If you did not do this, please reset your password.")
     })
@@ -179,7 +179,7 @@ router.get("/reset", (req, res, next) => {
             success: true,
             message: "Password reset link sent to email"
         })
-        sendEmail("tcss450chat@gmail.com", req.email, "Forgot Password", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/' + req.email +"/"+ newPassword + '">Reset Password</a>')
+        sendEmail("tcss450chat@gmail.com", req.email, "Password Reset Link for 🌦️RainyDay", 'You have recently requested to reset your password. Use this link to reset your password: <a href="https://tcss450-weather-chat.herokuapp.com/forgotpassword/reset/' + req.email +"/"+ newPassword + '">Reset Password</a>')
     })
     .catch((error) => {
         //credentials dod not match
