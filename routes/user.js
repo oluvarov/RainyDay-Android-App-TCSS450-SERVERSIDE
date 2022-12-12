@@ -109,7 +109,7 @@ router.post('/update/name', function(req, res, next){
 router.post('/update/password', (req, res, next) => {
 
     if (!isStringProvided(req.header("oldPassword")) || !isStringProvided(req.header("newPassword")) || !isValidPassword(req.header("newPassword"))) {
-        res.status(400).send('Missing information')
+        res.status(400).send('Missing information or invalid password')
         return
     } else 
      if(req.header("oldPassword") === req.header("newPassword")){
@@ -170,7 +170,7 @@ router.post('/update/password', (req, res, next) => {
         .then(result => {
             //We successfully added the user!
             //Send an email to the user with their new password
-            sendEmail("tcss450chat@gmail.com", email, "You password was updated in 🌦️RainyDay Chat", "You have recently updated your password. If you did not do this, please reset your password and make sure that your account is secure.")
+            sendEmail("tcss450chat@gmail.com", req.email, "You password was updated in 🌦️RainyDay Chat", "You have recently updated your password. If you did not do this, please reset your password and make sure that your account is secure.")
             res.status(200).send({
                 success: true
             })
