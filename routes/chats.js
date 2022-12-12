@@ -115,6 +115,7 @@ router.post("/", (request, response, next) => {
  * @apiUse JSONError
  */ 
  router.delete("/", (request, response, next) => {
+    request.body.chatid = parseInt(request.body.chatid)
     if (isNaN(request.body.chatid)) {
         response.status(400).send({
             message: "Missing required information"
